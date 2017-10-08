@@ -194,6 +194,16 @@ class Point final : public SerializableObject
         Length getLength() const noexcept {return Length(qSqrt(mX.toNm()*mX.toNm() + mY.toNm()*mY.toNm()));}
 
         /**
+         * @brief Calculate the shortest distance to a given line segment
+         *
+         * @param p1    Start point of the line segment
+         * @param p2    End point of the line segment
+         *
+         * @return Shortest distance between this point and the given line segment (>=0)
+         */
+        Length calcDistanceToLineSegment(const Point& p1, const Point& p2) const noexcept;
+
+        /**
          * @brief Check if the position represents the origin (X == 0 and Y == 0)
          *
          * @return True if X = Y = 0, otherwise false
@@ -372,6 +382,16 @@ class Point final : public SerializableObject
         ///       For this purpose, these methods will invert the Y-coordinate.
         static Point fromPx(qreal pixelsX, qreal pixelsY,           const Length& gridInterval = Length(0));
         static Point fromPx(const QPointF& pixels,                  const Length& gridInterval = Length(0));
+
+        /**
+         * @brief Calculate the dot product of two points (i.e. vectors)
+         *
+         * @param p1    First point resp. vector
+         * @param p2    Second point resp. vector
+         *
+         * @return Dot product
+         */
+        static Length dotProduct(const Point& p1, const Point& p2) noexcept;
 
         // Operators
         Point&  operator=(const Point& rhs)        {mX = rhs.mX;  mY = rhs.mY;  return *this;}

@@ -44,6 +44,25 @@ Point::Point(const SExpression& node)
     }
 }
 
+// Getters
+
+Length Point::calcDistanceToLineSegment(const Point& p1, const Point& p2) const noexcept
+{
+    Point a = p2 - p1;
+    Point b = *this - p1;
+    Length c = dotProduct(b, a);
+    Length d = dotProduct(a, a);
+    if (c <= 0) {
+        return (*this - p1).getLength();
+    } else if (d <= c) {
+        return (*this - p2).getLength();
+    } else {
+        Length b = c / d;
+        Point p3 = p1 + (a * b);
+        return (*this - p3).getLength();
+    }
+}
+
 // General Methods
 
 Point Point::abs() const noexcept
@@ -191,6 +210,11 @@ Point Point::fromPx(qreal pixelsX, qreal pixelsY, const Length& gridInterval)
 Point Point::fromPx(const QPointF& pixels, const Length& gridInterval)
 {
     return fromPx(pixels.x(), pixels.y(), gridInterval);
+}
+
+Length Point::dotProduct(const Point& p1, const Point& p2) noexcept
+{
+    return ((p1.mX * p2.mX) + (p1.mY * p2.mY));
 }
 
 // Non-Member Functions
