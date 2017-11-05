@@ -44,6 +44,7 @@
 #include "items/bi_polygon.h"
 #include "boardlayerstack.h"
 #include "boardusersettings.h"
+#include "../circuit/netsignal.h"
 
 /*****************************************************************************************
  *  Namespace
@@ -910,6 +911,24 @@ bool Board::checkAttributesValidity() const noexcept
     return true;
 }
 
+void Board::addConnectedPointsAndNetsToSegment(const BI_NetPoint* p, SExpression& seg,
+    QHash<const BI_NetPoint*, SExpression*>& lp,
+    QHash<const BI_NetLine*, SExpression*>& ll) const
+{
+    if (lp.contains(p)) return;
+    seg.appendChild(p->serializeToDomElement("netpoint"), true);
+    lp.insert(p, &seg);
+
+    foreach (const BI_NetLine* l, p->getLines()) {
+        if (!ll.contains(l)) {
+            seg.appendChild(l->serializeToDomElement("netline"), true);
+            ll.insert(l, &seg);
+            addConnectedPointsAndNetsToSegment(&l->getStartPoint(), seg, lp, ll);
+            addConnectedPointsAndNetsToSegment(&l->getEndPoint(), seg, lp, ll);
+        }
+    }
+}
+
 void Board::serialize(SExpression& root) const
 {
     if (!checkAttributesValidity()) throw LogicError(__FILE__, __LINE__);
@@ -924,9 +943,21 @@ void Board::serialize(SExpression& root) const
     root.appendLineBreak();
     serializePointerContainer(root, mVias, "via");
     root.appendLineBreak();
-    serializePointerContainer(root, mNetPoints, "netpoint");
-    root.appendLineBreak();
-    serializePointerContainer(root, mNetLines, "netline");
+
+    QHash<const BI_NetPoint*, SExpression*> points;
+    QHash<const BI_NetLine*, SExpression*> lines;
+
+    foreach (const BI_NetPoint* p, mNetPoints) {
+        if (!points.contains(p)) {
+            SExpression& seg = root.appendList("netsegment", true);
+            seg.appendToken(Uuid::createRandom());
+            seg.appendTokenChild("net", p->getNetSignal().getUuid(), true);
+            addConnectedPointsAndNetsToSegment(p, seg, points, lines);
+        }
+    }
+    Q_ASSERT(points.count() == mNetPoints.count());
+    Q_ASSERT(lines.count() == mNetLines.count());
+
     root.appendLineBreak();
     serializePointerContainer(root, mPolygons, "polygon");
     root.appendLineBreak();

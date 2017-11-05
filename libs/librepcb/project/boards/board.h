@@ -213,6 +213,10 @@ class Board final : public QObject, public AttributeProvider,
         bool checkAttributesValidity() const noexcept;
         void updateErcMessages() noexcept;
 
+        void addConnectedPointsAndNetsToSegment(const BI_NetPoint* p, SExpression& seg,
+            QHash<const BI_NetPoint*, SExpression*>& lp,
+            QHash<const BI_NetLine*, SExpression*>& ll) const;
+
         /// @copydoc librepcb::SerializableObject::serialize()
         void serialize(SExpression& root) const override;
 
