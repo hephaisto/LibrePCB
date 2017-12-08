@@ -113,44 +113,31 @@ bool BI_Via::isOnLayer(const QString& layerName) const noexcept
     return GraphicsLayer::isCopperLayer(layerName);
 }
 
-QPainterPath BI_Via::toQPainterPathPx(const Length& clearance, bool hole) const noexcept
+Path BI_Via::getOutline() const noexcept
 {
-    QPainterPath p;
-    p.setFillRule(Qt::OddEvenFill); // important to subtract the hole!
-    switch (mShape)
-    {
-        case Shape::Round: {
-            qreal dia = (mSize + clearance*2).toPx();
-            p.addEllipse(-dia/2, -dia/2, dia, dia);
-            break;
-        }
-        case Shape::Square: {
-            qreal size = (mSize + clearance*2).toPx();
-            p.addRect(-size/2, -size/2, size, size);
-            break;
-        }
-        case Shape::Octagon: {
-            qreal r = (mSize/2 + clearance).toPx();
-            qreal a = r * (2 - qSqrt(2));
-            QPolygonF octagon;
-            octagon.append(QPointF(r, r-a));
-            octagon.append(QPointF(r-a, r));
-            octagon.append(QPointF(a-r, r));
-            octagon.append(QPointF(-r, r-a));
-            octagon.append(QPointF(-r, a-r));
-            octagon.append(QPointF(a-r, -r));
-            octagon.append(QPointF(r-a, -r));
-            octagon.append(QPointF(r, a-r));
-            p.addPolygon(octagon);
-            break;
-        }
-        default: Q_ASSERT(false); break;
+    switch (mShape) {
+        case Shape::Round:      return Path::circle(mSize);
+        case Shape::Square:     return Path::rect(mSize, mSize);
+        case Shape::Octagon:    return Path::octagon(mSize, mSize);
+        default:                Q_ASSERT(false); break;
     }
-    if (hole) {
-        // remove hole
-        p.addEllipse(QPointF(0, 0), mDrillDiameter.toPx()/2, mDrillDiameter.toPx()/2);
-    }
-    return p;
+}
+
+Region BI_Via::getRegion() const noexcept
+{
+    Region r(getOutline());
+    r.addHole(Path::circle(mDrillDiameter));
+    return r;
+}
+
+Path BI_Via::toSceneOutline() const noexcept
+{
+    return getOutline().translate(mPosition);
+}
+
+Region BI_Via::toSceneRegion() const noexcept
+{
+    return getRegion().translate(mPosition);
 }
 
 /*****************************************************************************************

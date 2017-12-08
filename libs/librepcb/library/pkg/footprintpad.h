@@ -30,6 +30,7 @@
 #include <librepcb/common/fileio/cmd/cmdlistelementremove.h>
 #include <librepcb/common/fileio/cmd/cmdlistelementsswap.h>
 #include <librepcb/common/units/all_length_units.h>
+#include <librepcb/common/geometry/region.h>
 #include <librepcb/common/uuid.h>
 
 /*****************************************************************************************
@@ -78,9 +79,8 @@ class FootprintPad final : public SerializableObject
         BoardSide getBoardSide() const noexcept {return mBoardSide;}
         QString getLayerName() const noexcept;
         bool isOnLayer(const QString& name) const noexcept;
-        QRectF getBoundingRectPx() const noexcept;
-        const QPainterPath& toQPainterPathPx() const noexcept;
-        QPainterPath toMaskQPainterPathPx(const Length& clearance) const noexcept;
+        Path getOutline() const noexcept;
+        Region getRegion() const noexcept;
 
         // Setters
         void setPackagePadUuid(const Uuid& pad) noexcept;
@@ -121,8 +121,6 @@ class FootprintPad final : public SerializableObject
         Length mHeight;
         Length mDrillDiameter; // no effect if BoardSide != THT!
         BoardSide mBoardSide;
-        mutable QPainterPath mPainterPathPx; // used for caching
-
         FootprintPadGraphicsItem* mRegisteredGraphicsItem;
 };
 

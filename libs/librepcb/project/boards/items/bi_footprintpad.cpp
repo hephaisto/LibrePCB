@@ -207,6 +207,16 @@ bool BI_FootprintPad::isSelectable() const noexcept
     return mFootprint.isSelectable() && mGraphicsItem->isSelectable();
 }
 
+Path BI_FootprintPad::toSceneOutline() const noexcept
+{
+    return mFootprintPad->getOutline().rotate(mRotation).translate(mPosition);
+}
+
+Region BI_FootprintPad::toSceneRegion() const noexcept
+{
+    return mFootprintPad->getRegion().rotate(mRotation).translate(mPosition);
+}
+
 void BI_FootprintPad::setSelected(bool selected) noexcept
 {
     BI_Base::setSelected(selected);

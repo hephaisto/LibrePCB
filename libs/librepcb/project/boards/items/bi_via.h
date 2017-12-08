@@ -26,6 +26,7 @@
 #include <QtCore>
 #include "bi_base.h"
 #include <librepcb/common/fileio/serializableobject.h>
+#include <librepcb/common/geometry/region.h>
 #include <librepcb/common/uuid.h>
 #include "../graphicsitems/bgi_via.h"
 
@@ -80,8 +81,11 @@ class BI_Via final : public BI_Base, public SerializableObject
         BI_NetPoint* getNetPointOfLayer(const QString& layerName) const noexcept {return mRegisteredNetPoints.value(layerName, nullptr);}
         bool isUsed() const noexcept {return (mRegisteredNetPoints.count() > 0);}
         bool isOnLayer(const QString& layerName) const noexcept;
-        QPainterPath toQPainterPathPx(const Length& clearance, bool hole) const noexcept;
         bool isSelectable() const noexcept override;
+        Path getOutline() const noexcept;
+        Region getRegion() const noexcept;
+        Path toSceneOutline() const noexcept;
+        Region toSceneRegion() const noexcept;
 
         // Setters
         void setPosition(const Point& position) noexcept;

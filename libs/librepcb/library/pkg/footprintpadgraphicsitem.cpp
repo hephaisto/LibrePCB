@@ -54,7 +54,7 @@ FootprintPadGraphicsItem::FootprintPadGraphicsItem(FootprintPad& pad,
     // pin properties
     setPosition(mPad.getPosition());
     setRotation(mPad.getRotation());
-    setShape(mPad.toQPainterPathPx());
+    setShape(mPad.getRegion());
     setLayerName(mPad.getLayerName());
 
     // register to the pad to get attribute updates
@@ -80,9 +80,9 @@ void FootprintPadGraphicsItem::setRotation(const Angle& rot) noexcept
     QGraphicsItem::setRotation(-rot.toDeg());
 }
 
-void FootprintPadGraphicsItem::setShape(const QPainterPath& shape) noexcept
+void FootprintPadGraphicsItem::setShape(const Region& shape) noexcept
 {
-    mPathGraphicsItem->setPath(shape);
+    mPathGraphicsItem->setPath(shape.toQPainterPathPx());
     //mTextGraphicsItem->setHeight(Length::fromPx(shape.boundingRect().height()));
 }
 

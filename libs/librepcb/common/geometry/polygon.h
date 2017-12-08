@@ -30,6 +30,7 @@
 #include "../fileio/cmd/cmdlistelementremove.h"
 #include "../fileio/cmd/cmdlistelementsswap.h"
 #include "../units/all_length_units.h"
+#include "path.h"
 
 /*****************************************************************************************
  *  Namespace / Forward Declarations
@@ -184,6 +185,7 @@ class Polygon final : public SerializableObject, private PolygonSegmentList::IF_
         Point getStartPointOfSegment(int index) const noexcept;
         Point calcCenterOfArcSegment(int index) const noexcept;
         Point calcCenter() const noexcept;
+        Path toPath() const noexcept;
         const QPainterPath& toQPainterPathPx() const noexcept;
 
         // Setters

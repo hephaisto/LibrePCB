@@ -173,6 +173,16 @@ Point Polygon::calcCenter() const noexcept
     return center / (mSegments.count() + 1);
 }
 
+Path Polygon::toPath() const noexcept
+{
+    Path p;
+    p.addVertex(mStartPos);
+    for (const PolygonSegment& segment : mSegments) {
+        p.addVertex(segment.getEndPos(), segment.getAngle());
+    }
+    return p;
+}
+
 const QPainterPath& Polygon::toQPainterPathPx() const noexcept
 {
     if (mPainterPathPx.isEmpty()) {

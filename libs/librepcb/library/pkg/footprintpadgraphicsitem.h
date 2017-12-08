@@ -26,6 +26,7 @@
 #include <QtCore>
 #include <QtWidgets>
 #include <librepcb/common/units/all_length_units.h>
+#include <librepcb/common/geometry/region.h>
 
 /*****************************************************************************************
  *  Namespace / Forward Declarations
@@ -67,7 +68,7 @@ class FootprintPadGraphicsItem final : public QGraphicsItem
         // Setters
         void setPosition(const Point& pos) noexcept;
         void setRotation(const Angle& rot) noexcept;
-        void setShape(const QPainterPath& shape) noexcept;
+        void setShape(const Region& shape) noexcept;
         void setLayerName(const QString& name) noexcept;
         //void setName(const QString& name) noexcept;
         void setSelected(bool selected) noexcept;

@@ -26,6 +26,7 @@
 #include <QtCore>
 #include "bi_base.h"
 #include "../graphicsitems/bgi_footprintpad.h"
+#include <librepcb/common/geometry/region.h>
 
 /*****************************************************************************************
  *  Namespace / Forward Declarations
@@ -77,6 +78,8 @@ class BI_FootprintPad final : public BI_Base
         NetSignal* getCompSigInstNetSignal() const noexcept;
         bool isUsed() const noexcept {return (mRegisteredNetPoints.count() > 0);}
         bool isSelectable() const noexcept override;
+        Path toSceneOutline() const noexcept;
+        Region toSceneRegion() const noexcept;
 
         // General Methods
         void addToBoard() override;
