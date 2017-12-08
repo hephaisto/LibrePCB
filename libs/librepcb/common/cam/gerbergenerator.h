@@ -34,6 +34,7 @@
  ****************************************************************************************/
 namespace librepcb {
 
+class Path;
 class Ellipse;
 class Polygon;
 class GerberApertureList;
@@ -79,6 +80,7 @@ class GerberGenerator final
         void drawEllipseArea(const Ellipse& ellipse) noexcept;
         void drawPolygonOutline(const Polygon& polygon) noexcept;
         void drawPolygonArea(const Polygon& polygon) noexcept;
+        void drawArea(const Path& outline) noexcept;
         void flashCircle(const Point& pos, const Length& dia, const Length& hole) noexcept;
         void flashRect(const Point& pos, const Length& w, const Length& h, const Angle& rot, const Length& hole) noexcept;
         void flashObround(const Point& pos, const Length& w, const Length& h, const Angle& rot, const Length& hole) noexcept;

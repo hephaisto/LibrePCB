@@ -25,8 +25,10 @@
 #include "gerberaperturelist.h"
 #include "../geometry/ellipse.h"
 #include "../geometry/polygon.h"
+#include "../geometry/path.h"
 #include "../fileio/smarttextfile.h"
 #include "../application.h"
+#include "../toolbox.h"
 
 /*****************************************************************************************
  *  Namespace
@@ -154,6 +156,45 @@ void GerberGenerator::drawPolygonArea(const Polygon& polygon) noexcept
     if (!polygon.isClosed()) {
         qCritical() << "Accidentally generated gerber export of a non-closed polygon!";
         linearInterpolateToPosition(polygon.getStartPos());
+    }
+    setRegionModeOff();
+}
+
+void GerberGenerator::drawArea(const Path& outline) noexcept
+{
+    if (outline.getVertices().size() < 2) {
+        qCritical() << "Skip invalid path in gerber export!";
+        return;
+    }
+    setCurrentAperture(mApertureList->setCircle(Length(0), Length(0)));
+    setRegionModeOn();
+    moveToPosition(outline.getVertices().front().getPos());
+    Point lastPos = outline.getVertices().front().getPos();
+    for (const Vertex& vertex : outline.getVertices()) {
+        if (vertex.getAngle() == 0) {
+            // linear segment
+            linearInterpolateToPosition(vertex.getPos());
+        } else {
+            // arc segment
+            if (vertex.getAngle().abs() <= Angle::deg90()) {
+                setMultiQuadrantArcModeOff();
+            } else {
+                setMultiQuadrantArcModeOn();
+            }
+            if (vertex.getAngle() < 0) {
+                switchToCircularCwInterpolationModeG02();
+            } else {
+                switchToCircularCcwInterpolationModeG03();
+            }
+            circularInterpolateToPosition(lastPos, Toolbox::arcCenter(
+                lastPos, vertex.getPos(), vertex.getAngle()), vertex.getPos());
+            switchToLinearInterpolationModeG01();
+        }
+        lastPos = vertex.getPos();
+    }
+    if (!outline.isClosed()) {
+        qCritical() << "Accidentally generated gerber export of a non-closed path!";
+        linearInterpolateToPosition(outline.getVertices().front().getPos());
     }
     setRegionModeOff();
 }
