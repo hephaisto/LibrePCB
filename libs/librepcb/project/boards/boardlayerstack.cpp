@@ -199,7 +199,7 @@ void BoardLayerStack::addAllLayers() noexcept
     addLayer(GraphicsLayer::sBoardAlignment);
     addLayer(GraphicsLayer::sBoardDocumentation);
     addLayer(GraphicsLayer::sBoardComments);
-    addLayer(GraphicsLayer::sBoardcGuide);
+    addLayer(GraphicsLayer::sBoardGuide);
 
 #ifdef QT_DEBUG
     // debug layers
