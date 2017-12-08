@@ -30,6 +30,7 @@
 #include <librepcb/common/fileio/serializableobject.h>
 #include <librepcb/common/units/all_length_units.h>
 #include <librepcb/common/fileio/filepath.h>
+#include <librepcb/common/geometry/region.h>
 #include <librepcb/common/exceptions.h>
 #include <librepcb/common/uuid.h>
 #include "../erc/if_ercmsgprovider.h"
@@ -58,6 +59,7 @@ class BI_NetSegment;
 class BI_NetPoint;
 class BI_NetLine;
 class BI_Polygon;
+class BI_Plane;
 class BoardLayerStack;
 class BoardUserSettings;
 class BoardSelectionQuery;
@@ -125,6 +127,7 @@ class Board final : public QObject, public AttributeProvider,
         QList<BI_FootprintPad*> getPadsAtScenePos(const Point& pos, const GraphicsLayer* layer,
                                                   const NetSignal* netsignal) const noexcept;
         QList<BI_Base*> getAllItems() const noexcept;
+        Region getArea() const noexcept;
 
         // Setters: General
         void setGridProperties(const GridProperties& grid) noexcept;
@@ -145,6 +148,10 @@ class Board final : public QObject, public AttributeProvider,
         BI_NetSegment* getNetSegmentByUuid(const Uuid& uuid) const noexcept;
         void addNetSegment(BI_NetSegment& netsegment);
         void removeNetSegment(BI_NetSegment& netsegment);
+
+        // Plane Methods
+        const QList<BI_Plane*>& getPlanes() const noexcept {return mPlanes;}
+        void rebuildAllPlanes() noexcept;
 
         // Polygon Methods
         const QList<BI_Polygon*>& getPolygons() const noexcept {return mPolygons;}
@@ -220,6 +227,7 @@ class Board final : public QObject, public AttributeProvider,
         // items
         QMap<Uuid, BI_Device*> mDeviceInstances;
         QList<BI_NetSegment*> mNetSegments;
+        QList<BI_Plane*> mPlanes;
         QList<BI_Polygon*> mPolygons;
 
         // ERC messages

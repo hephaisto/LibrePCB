@@ -31,6 +31,7 @@
 #include <librepcb/common/geometry/polygon.h>
 #include <librepcb/common/graphics/graphicsview.h>
 #include <librepcb/common/graphics/graphicsscene.h>
+#include <librepcb/common/geometry/polygon.h>
 #include <librepcb/common/gridproperties.h>
 #include "../circuit/circuit.h"
 #include "../erc/ercmsg.h"
@@ -42,6 +43,8 @@
 #include "items/bi_netsegment.h"
 #include "items/bi_netpoint.h"
 #include "items/bi_netline.h"
+#include "items/bi_polygon.h"
+#include "items/bi_plane.h"
 #include <librepcb/library/cmp/component.h>
 #include "items/bi_polygon.h"
 #include "boardlayerstack.h"
@@ -102,12 +105,15 @@ Board::Board(const Board& other, const FilePath& filepath, const QString& name) 
             mNetSegments.append(copy);
         }
 
+        // TODO: copy planes
+
         // copy polygons
         foreach (const BI_Polygon* polygon, other.mPolygons) {
             BI_Polygon* copy = new BI_Polygon(*this, *polygon);
             mPolygons.append(copy);
         }
 
+        // rebuildAllPlanes(); --> fragments are copied too, so no need to rebuild them
         updateErcMessages();
         updateIcon();
 
@@ -124,6 +130,7 @@ Board::Board(const Board& other, const FilePath& filepath, const QString& name) 
         // free the allocated memory in the reverse order of their allocation...
         qDeleteAll(mErcMsgListUnplacedComponentInstances);    mErcMsgListUnplacedComponentInstances.clear();
         qDeleteAll(mPolygons);          mPolygons.clear();
+        qDeleteAll(mPlanes);            mPlanes.clear();
         qDeleteAll(mNetSegments);       mNetSegments.clear();
         qDeleteAll(mDeviceInstances);   mDeviceInstances.clear();
         mUserSettings.reset();
@@ -214,6 +221,12 @@ Board::Board(Project& project, const FilePath& filepath, bool restore,
                 mNetSegments.append(netsegment);
             }
 
+            // Load all planes
+            foreach (const SExpression& node, root.getChildren("plane")) {
+                BI_Plane* plane = new BI_Plane(*this, node);
+                mPlanes.append(plane);
+            }
+
             // Load all polygons
             foreach (const SExpression& node, root.getChildren("polygon")) {
                 BI_Polygon* polygon = new BI_Polygon(*this, node);
@@ -221,6 +234,7 @@ Board::Board(Project& project, const FilePath& filepath, bool restore,
             }
         }
 
+        rebuildAllPlanes();
         updateErcMessages();
         updateIcon();
 
@@ -237,6 +251,7 @@ Board::Board(Project& project, const FilePath& filepath, bool restore,
         // free the allocated memory in the reverse order of their allocation...
         qDeleteAll(mErcMsgListUnplacedComponentInstances);    mErcMsgListUnplacedComponentInstances.clear();
         qDeleteAll(mPolygons);          mPolygons.clear();
+        qDeleteAll(mPlanes);            mPlanes.clear();
         qDeleteAll(mNetSegments);       mNetSegments.clear();
         qDeleteAll(mDeviceInstances);   mDeviceInstances.clear();
         mUserSettings.reset();
@@ -257,6 +272,7 @@ Board::~Board() noexcept
 
     // delete all items
     qDeleteAll(mPolygons);          mPolygons.clear();
+    qDeleteAll(mPlanes);            mPlanes.clear();
     qDeleteAll(mNetSegments);       mNetSegments.clear();
     qDeleteAll(mDeviceInstances);   mDeviceInstances.clear();
 
@@ -274,7 +290,7 @@ Board::~Board() noexcept
 
 bool Board::isEmpty() const noexcept
 {
-    return (mDeviceInstances.isEmpty() && mNetSegments.isEmpty());
+    return (mDeviceInstances.isEmpty() && mNetSegments.isEmpty() && mPlanes.isEmpty());
 }
 
 QList<BI_Base*> Board::getItemsAtScenePos(const Point& pos) const noexcept
@@ -384,9 +400,28 @@ QList<BI_Base*> Board::getAllItems() const noexcept
         items.append(device);
     foreach (BI_NetSegment* netsegment, mNetSegments)
         items.append(netsegment);
+    foreach (BI_Plane* plane, mPlanes)
+        items.append(plane);
     foreach (BI_Polygon* polygon, mPolygons)
         items.append(polygon);
     return items;
+}
+
+Region Board::getArea() const noexcept
+{
+    // TODO: This method currently assumes that the first outline polygon defines the
+    // board outline, so all other cases will not work properly!
+    Region r;
+    foreach (const BI_Polygon* polygon, mPolygons) {
+        if (polygon->getPolygon().getLayerName() == GraphicsLayer::sBoardOutlines) {
+            if (r.getOutline().getVertices().isEmpty()) {
+                r.setOutline(polygon->getPolygon().toPath());
+            } else {
+                r.addHole(polygon->getPolygon().toPath());
+            }
+        }
+    }
+    return r;
 }
 
 /*****************************************************************************************
@@ -476,6 +511,21 @@ void Board::removeNetSegment(BI_NetSegment& netsegment)
     // remove from board
     netsegment.removeFromBoard(); // can throw
     mNetSegments.removeOne(&netsegment);
+}
+
+/*****************************************************************************************
+ *  Plane Methods
+ ****************************************************************************************/
+
+void Board::rebuildAllPlanes() noexcept
+{
+    QList<BI_Plane*> planes = mPlanes;
+    qSort(planes.begin(), planes.end(),
+          [](const BI_Plane* p1, const BI_Plane* p2)
+          {return !(*p1 < *p2);}); // sort by priority (highest priority first)
+    foreach (BI_Plane* plane, planes) {
+        plane->rebuild();
+    }
 }
 
 /*****************************************************************************************
@@ -593,6 +643,9 @@ void Board::setSelectionRect(const Point& p1, const Point& p2, bool updateItems)
         foreach (BI_NetSegment* segment, mNetSegments) {
             segment->setSelectionRect(rectPx);
         }
+        foreach (BI_Plane* plane, mPlanes) {
+            bool select = plane->isSelectable() && plane->getGrabAreaScenePx().intersects(rectPx);
+            plane->setSelected(select);
         foreach (BI_Polygon* polygon, mPolygons) {
             bool select = polygon->isSelectable() && polygon->getGrabAreaScenePx().intersects(rectPx);
             polygon->setSelected(select);
@@ -607,6 +660,8 @@ void Board::clearSelection() const noexcept
     foreach (BI_NetSegment* segment, mNetSegments) {
         segment->clearSelection();
     }
+    foreach (BI_Plane* plane, mPlanes) {
+        plane->setSelected(false);
     foreach (BI_Polygon* polygon, mPolygons) {
         polygon->setSelected(false);
     }
@@ -673,6 +728,8 @@ void Board::serialize(SExpression& root) const
     serializePointerContainer(root, mDeviceInstances, "device");
     root.appendLineBreak();
     serializePointerContainer(root, mNetSegments, "netsegment");
+    root.appendLineBreak();
+    serializePointerContainer(root, mPlanes, "plane");
     root.appendLineBreak();
     serializePointerContainer(root, mPolygons, "polygon");
     root.appendLineBreak();
