@@ -70,8 +70,12 @@ SOURCES += \
     geometry/cmd/cmdtextedit.cpp \
     geometry/ellipse.cpp \
     geometry/hole.cpp \
+    geometry/path.cpp \
     geometry/polygon.cpp \
+    geometry/region.cpp \
+    geometry/regiontopathconverter.cpp \
     geometry/text.cpp \
+    geometry/vertex.cpp \
     graphics/defaultgraphicslayerprovider.cpp \
     graphics/ellipsegraphicsitem.cpp \
     graphics/graphicslayer.cpp \
@@ -166,8 +170,12 @@ HEADERS += \
     geometry/cmd/cmdtextedit.h \
     geometry/ellipse.h \
     geometry/hole.h \
+    geometry/path.h \
     geometry/polygon.h \
+    geometry/region.h \
+    geometry/regiontopathconverter.h \
     geometry/text.h \
+    geometry/vertex.h \
     graphics/defaultgraphicslayerprovider.h \
     graphics/ellipsegraphicsitem.h \
     graphics/graphicslayer.h \
