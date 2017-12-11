@@ -616,6 +616,8 @@
    </property>
    <property name="text">
     <string>Draw Polygon</string>
+   </property>
+  </action>
   <action name="actionRebuildPlanes">
    <property name="icon">
     <iconset resource="../../../../img/images.qrc">

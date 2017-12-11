@@ -646,6 +646,7 @@ void Board::setSelectionRect(const Point& p1, const Point& p2, bool updateItems)
         foreach (BI_Plane* plane, mPlanes) {
             bool select = plane->isSelectable() && plane->getGrabAreaScenePx().intersects(rectPx);
             plane->setSelected(select);
+        }
         foreach (BI_Polygon* polygon, mPolygons) {
             bool select = polygon->isSelectable() && polygon->getGrabAreaScenePx().intersects(rectPx);
             polygon->setSelected(select);
@@ -662,6 +663,7 @@ void Board::clearSelection() const noexcept
     }
     foreach (BI_Plane* plane, mPlanes) {
         plane->setSelected(false);
+    }
     foreach (BI_Polygon* polygon, mPolygons) {
         polygon->setSelected(false);
     }

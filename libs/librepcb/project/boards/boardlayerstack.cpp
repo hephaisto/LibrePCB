@@ -86,7 +86,7 @@ QList<GraphicsLayer*> BoardLayerStack::getAllowedPolygonLayers() const noexcept
         GraphicsLayer::sBoardOutlines,
         GraphicsLayer::sBoardMillingPth,
         GraphicsLayer::sBoardDocumentation,
-        GraphicsLayer::sBoardcGuide,
+        GraphicsLayer::sBoardGuide,
         GraphicsLayer::sTopPlacement,
         GraphicsLayer::sTopDocumentation,
         GraphicsLayer::sTopNames,
