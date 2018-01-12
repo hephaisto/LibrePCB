@@ -105,7 +105,11 @@ Board::Board(const Board& other, const FilePath& filepath, const QString& name) 
             mNetSegments.append(copy);
         }
 
-        // TODO: copy planes
+        // copy planes
+        foreach (const BI_Plane* plane, other.mPlanes) {
+            BI_Plane* copy = new BI_Plane(*this, *plane);
+            mPlanes.append(copy);
+        }
 
         // copy polygons
         foreach (const BI_Polygon* polygon, other.mPolygons) {
@@ -328,6 +332,12 @@ QList<BI_Base*> Board::getItemsAtScenePos(const Point& pos) const noexcept
                     list.insert(1, pad);
                 }
             }
+        }
+    }
+    // planes
+    foreach (BI_Plane* planes, mPlanes) {
+        if (planes->isSelectable() && planes->getGrabAreaScenePx().contains(scenePosPx)) {
+            list.append(planes);
         }
     }
     // polygons
