@@ -42,7 +42,7 @@ namespace project {
 BI_Polygon::BI_Polygon(Board& board, const BI_Polygon& other) :
     BI_Base(board)
 {
-    mPolygon.reset(new Polygon(*other.mPolygon));
+    mPolygon.reset(new Polygon(Uuid::createRandom(), *other.mPolygon));
     init();
 }
 
@@ -53,18 +53,18 @@ BI_Polygon::BI_Polygon(Board& board, const SExpression& node) :
     init();
 }
 
-BI_Polygon::BI_Polygon(Board& board, const Polygon& polygon) :
+BI_Polygon::BI_Polygon(Board& board, std::unique_ptr<Polygon>&& polygon) :
     BI_Base(board)
 {
-    mPolygon.reset(new Polygon(polygon));
+    mPolygon.reset(polygon.release());
     init();
 }
 
-BI_Polygon::BI_Polygon(Board& board, const QString& layerName, const Length& lineWidth, bool fill,
+BI_Polygon::BI_Polygon(Board& board, const Uuid& uuid, const QString& layerName, const Length& lineWidth, bool fill,
                        bool isGrabArea, const Point& startPos) :
     BI_Base(board)
 {
-    mPolygon.reset(new Polygon(layerName, lineWidth, fill, isGrabArea, startPos));
+    mPolygon.reset(new Polygon(uuid, layerName, lineWidth, fill, isGrabArea, startPos));
     init();
 }
 

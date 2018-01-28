@@ -125,7 +125,7 @@ void NewElementWizardContext::createLibraryElement()
                 mElementAuthor, mElementName, mElementDescription, mElementKeywords);
             element.setCategories(categories);
             element.getPins() = mSymbolPins;
-            element.getPolygons() = mSymbolPolygons;
+            element.getPolygons() = std::move(mSymbolPolygons);
             element.getEllipses() = mSymbolEllipses;
             element.getTexts() = mSymbolTexts;
             element.saveIntoParentDirectory(mLibrary.getElementsDirectory<Symbol>());
@@ -137,7 +137,7 @@ void NewElementWizardContext::createLibraryElement()
                 mElementAuthor, mElementName, mElementDescription, mElementKeywords);
             element.setCategories(categories);
             element.getPads() = mPackagePads;
-            element.getFootprints() = mPackageFootprints;
+            element.getFootprints() = std::move(mPackageFootprints);
             if (element.getFootprints().isEmpty()) {
                 element.getFootprints().append(
                     std::make_shared<Footprint>(Uuid::createRandom(), "default", ""));

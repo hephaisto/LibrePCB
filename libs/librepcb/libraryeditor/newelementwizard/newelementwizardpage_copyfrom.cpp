@@ -82,7 +82,7 @@ bool NewElementWizardPage_CopyFrom::validatePage() noexcept
         case NewElementWizardContext::ElementType::Symbol: {
             const Symbol* symbol = dynamic_cast<Symbol*>(mSelectedElement.data()); Q_ASSERT(symbol);
             mContext.mSymbolPins = symbol->getPins();
-            mContext.mSymbolPolygons = symbol->getPolygons();
+            mContext.mSymbolPolygons = PolygonListHelpers::cloneWithRandomUuids(symbol->getPolygons());
             mContext.mSymbolEllipses = symbol->getEllipses();
             mContext.mSymbolTexts = symbol->getTexts();
             break;

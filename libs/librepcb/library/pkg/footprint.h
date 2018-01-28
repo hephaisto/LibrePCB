@@ -66,7 +66,7 @@ class Footprint final : public SerializableObject, private FootprintPadList::IF_
 
         // Constructors / Destructor
         Footprint() = delete;
-        Footprint(const Footprint& other) noexcept;
+        Footprint(const Footprint& other) = delete;
         Footprint(const Uuid& uuid, const QString& name_en_US,
                   const QString& description_en_US);
         explicit Footprint(const SExpression& node);
@@ -104,7 +104,7 @@ class Footprint final : public SerializableObject, private FootprintPadList::IF_
         // Operator Overloadings
         bool operator==(const Footprint& rhs) const noexcept;
         bool operator!=(const Footprint& rhs) const noexcept {return !(*this == rhs);}
-        Footprint& operator=(const Footprint& rhs) noexcept;
+        Footprint& operator=(const Footprint& rhs) = delete;
 
 
     private: // Methods
@@ -152,6 +152,24 @@ using FootprintList = SerializableObjectList<Footprint, FootprintListNameProvide
 using CmdFootprintInsert = CmdListElementInsert<Footprint, FootprintListNameProvider>;
 using CmdFootprintRemove = CmdListElementRemove<Footprint, FootprintListNameProvider>;
 using CmdFootprintsSwap= CmdListElementsSwap<Footprint, FootprintListNameProvider>;
+
+/*****************************************************************************************
+ *  Class FootprintListHelpers
+ ****************************************************************************************/
+
+class FootprintListHelpers
+{
+    public:
+        FootprintListHelpers() = delete; // disable instantiation
+
+        static FootprintList cloneWithRandomUuids(const FootprintList& list) noexcept {
+            FootprintList clone;
+            for (const auto& item : list) {
+                clone.append(std::make_shared<Footprint>(Uuid::createRandom(), item));
+            }
+            return clone;
+        }
+};
 
 /*****************************************************************************************
  *  End of File

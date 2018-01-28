@@ -315,7 +315,7 @@ void FootprintListEditorWidget::copyFootprint(const Uuid& uuid) noexcept
                                         "Copy of " % original->getNames().getDefaultValue(), "")); // can throw
         copy->getDescriptions() = original->getDescriptions();
         copy->getPads() = original->getPads();
-        copy->getPolygons() = original->getPolygons();
+        copy->getPolygons() = PolygonListHelpers::cloneWithRandomUuids(original->getPolygons());
         copy->getEllipses() = original->getEllipses();
         copy->getTexts() = original->getTexts();
         copy->getHoles() = original->getHoles();

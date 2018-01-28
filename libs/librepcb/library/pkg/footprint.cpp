@@ -35,12 +35,12 @@ namespace library {
  *  Constructors / Destructor
  ****************************************************************************************/
 
-Footprint::Footprint(const Footprint& other) noexcept :
+/*Footprint::Footprint(const Footprint& other) noexcept :
     mPads(this), mPolygons(this), mEllipses(this), mTexts(this), mHoles(this),
     mRegisteredGraphicsItem(nullptr)
 {
-    *this = other;
-}
+    //*this = other;
+}*/
 
 Footprint::Footprint(const Uuid& uuid, const QString& name_en_US,
                      const QString& description_en_US) :
@@ -119,7 +119,7 @@ bool Footprint::operator==(const Footprint& rhs) const noexcept
     return true;
 }
 
-Footprint& Footprint::operator=(const Footprint& rhs) noexcept
+/*Footprint& Footprint::operator=(const Footprint& rhs) noexcept
 {
     mUuid = rhs.mUuid;
     mNames = rhs.mNames;
@@ -130,7 +130,7 @@ Footprint& Footprint::operator=(const Footprint& rhs) noexcept
     mTexts = rhs.mTexts;
     mHoles = rhs.mHoles;
     return *this;
-}
+}*/
 
 /*****************************************************************************************
  *  Private Methods

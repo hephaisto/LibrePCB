@@ -212,7 +212,7 @@ void BoardGerberExport::drawLayer(GerberGenerator& gen, const QString& layerName
     foreach (const BI_Polygon* polygon, mBoard.getPolygons()) {
         Q_ASSERT(polygon);
         if (layerName == polygon->getPolygon().getLayerName()) {
-            Polygon p(polygon->getPolygon());
+            Polygon p(Uuid::createRandom(), polygon->getPolygon());
             p.setLineWidth(calcWidthOfLayer(polygon->getPolygon().getLineWidth(), layerName));
             gen.drawPolygonOutline(p);
         }
@@ -263,7 +263,7 @@ void BoardGerberExport::drawFootprint(GerberGenerator& gen, const BI_Footprint& 
     for (const Polygon& polygon : footprint.getLibFootprint().getPolygons()) {
         QString layer = footprint.getIsMirrored() ? GraphicsLayer::getMirroredLayerName(layerName) : layerName;
         if (layer == polygon.getLayerName()) {
-            Polygon p = polygon;
+            Polygon p(Uuid::createRandom(), polygon);
             if (footprint.getIsMirrored()) p.mirror(Qt::Horizontal);
             p.rotate(footprint.getIsMirrored() ? -footprint.getRotation() : footprint.getRotation());
             p.translate(footprint.getPosition());
