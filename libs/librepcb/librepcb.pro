@@ -8,7 +8,8 @@ SUBDIRS = \
     eagleimport \
     libraryeditor \
     projecteditor \
-    librarymanager
+    librarymanager \
+	python
 
 library.depends = common
 project.depends = library
