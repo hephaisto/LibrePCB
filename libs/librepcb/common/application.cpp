@@ -77,6 +77,11 @@ Application::~Application() noexcept
  *  Getters
  ****************************************************************************************/
 
+const Version Application::getStaticAppVersion()
+{
+    return Version(APP_VERSION);
+}
+
 FilePath Application::getResourcesFilePath(const QString& filepath) const noexcept
 {
     return mResourcesDir.getPathTo(filepath);

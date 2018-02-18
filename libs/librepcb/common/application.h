@@ -65,6 +65,7 @@ class Application final : public QApplication
         ~Application() noexcept;
 
         // Getters
+        static const Version getStaticAppVersion();
         const Version& getAppVersion() const noexcept {return mAppVersion;}
         const QString& getGitVersion() const noexcept {return mGitVersion;}
         const Version& getFileFormatVersion() const noexcept {return mFileFormatVersion;}

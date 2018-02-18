@@ -87,7 +87,7 @@ LibraryBaseElement::LibraryBaseElement(const FilePath& elementDirectory,
     // read version number from version file
     SmartVersionFile versionFile(versionFilePath, false, true);
     mLoadingElementFileVersion = versionFile.getVersion();
-    if (mLoadingElementFileVersion != qApp->getAppVersion()) {
+    if (mLoadingElementFileVersion != Application::getStaticAppVersion()) {
         throw RuntimeError(__FILE__, __LINE__,
             QString(tr("The library element %1 was created with a newer application "
                        "version. You need at least LibrePCB version %2 to open it."))
@@ -170,7 +170,7 @@ void LibraryBaseElement::save()
     // save version number file
     QScopedPointer<SmartVersionFile> versionFile(SmartVersionFile::create(
         mDirectory.getPathTo(".librepcb-" % mShortElementName),
-        qApp->getFileFormatVersion()));
+        Application::getStaticAppVersion()));
     versionFile->save(true);
 }
 
