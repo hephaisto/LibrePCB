@@ -210,6 +210,12 @@ class SerializableObjectList : public SerializableObject
             return ptr;
         }
 
+		std::shared_ptr<T> at_with_exception(int index) {
+			if( !contains(index) )
+				throw std::out_of_range("SerializableObjectList out of range");
+			return (*this)[index];
+		}
+
         // Iterator Access
         const_iterator begin() const noexcept {return mObjects.begin();}
         const_iterator end() const noexcept {return mObjects.end();}
