@@ -86,9 +86,9 @@ void init_geometry()
         // TODO
         ;
 
-    DECLARE_SERIALIZABLE_LIST(, Polygon);
-    DECLARE_SERIALIZABLE_LIST(, Ellipse);
-    DECLARE_SERIALIZABLE_LIST(, Text);
+    DECLARE_SERIALIZABLE_LIST(Polygon);
+    DECLARE_SERIALIZABLE_LIST(Ellipse);
+    DECLARE_SERIALIZABLE_LIST(Text);
 }
 
 

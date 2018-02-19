@@ -38,7 +38,7 @@ void init_library()
         .def("getRotation", &SymbolPin::getRotation, return_internal_reference<1>())
         ;
 
-    DECLARE_SERIALIZABLE_LIST(UuidName, SymbolPin);
+    DECLARE_SERIALIZABLE_LIST(SymbolPin);
 
     class_<LibraryBaseElement, boost::noncopyable>(
             "LibraryBaseElement",
