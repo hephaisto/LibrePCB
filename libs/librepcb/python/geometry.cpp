@@ -32,6 +32,16 @@ void init_geometry()
             )
         .add_property("x", make_function(&Point::getX, return_internal_reference<1>()), &Point::setX)
         .add_property("y", make_function(&Point::getY, return_internal_reference<1>()), &Point::setY)
+
+        .def(self -  other<Point>())
+        .def(self +  other<Point>())
+        .def(self -= other<Point>())
+        .def(self += other<Point>())
+
+        .def(self *  other<Length>())
+        .def(self /  other<Length>())
+
+        .def(self == other<Point>())
         ;
 
     class_<Length>(
@@ -55,6 +65,7 @@ void init_geometry()
         .def(self <= other<Length>())
         .def(self >= other<Length>())
         .def(self == other<Length>())
+        .def(self == other<LengthBase_t>())
         .def(self != other<Length>())
         ;
 
@@ -64,6 +75,14 @@ void init_geometry()
             )
         .def("toMicroDeg", &Angle::toMicroDeg)
         .def("__str__", &Angle::toDegString)
+
+        .def(self +  other<Angle>())
+        .def(self -  other<Angle>())
+        .def(self += other<Angle>())
+        .def(self -= other<Angle>())
+
+        .def(self == other<Angle>())
+        .def(self == other<qint32>())
         ;
 
     // geometric objects

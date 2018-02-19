@@ -9,6 +9,8 @@ namespace python {
 
 using boost::python::class_;
 using boost::python::init;
+using boost::python::self;
+using boost::python::other;
 
 void init_core()
 {
@@ -19,6 +21,7 @@ void init_core()
             init<QString>()
             )
         .def("__str__", &Uuid::toStr)
+        .def(self == other<Uuid>())
         .def("createRandom", &Uuid::createRandom)
         .staticmethod("createRandom")
         ;
