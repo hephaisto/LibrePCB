@@ -18,6 +18,8 @@ using boost::python::class_;
 using boost::python::init;
 using boost::python::no_init;
 using boost::python::return_internal_reference;
+using boost::python::return_value_policy;
+using boost::python::copy_const_reference;
 using boost::python::self;
 using boost::python::other;
 
@@ -86,23 +88,34 @@ void init_geometry()
         ;
 
     // geometric objects
-    class_<Polygon>(
+    class_<Polygon, shared_ptr<Polygon> >(
             "Polygon",
             no_init
             )
-        // TODO
+        .add_property("layerName", make_function(&Polygon::getLayerName, return_value_policy<copy_const_reference>()), &Polygon::setLayerName)
         ;
-    class_<Ellipse>(
+    class_<Ellipse, shared_ptr<Ellipse> >(
             "Ellipse",
             no_init
             )
-        // TODO
-        ;
-    class_<Text>(
+        .add_property("uuid", make_function(&Ellipse::getLayerName, return_value_policy<copy_const_reference>()))
+        .add_property("layerName", make_function(&Ellipse::getLayerName, return_value_policy<copy_const_reference>()), &Ellipse::setLayerName)
+        .add_property("lineWidth", make_function(&Ellipse::getLineWidth, return_internal_reference<1>()), &Ellipse::setLineWidth)
+        .add_property("center", make_function(&Ellipse::getCenter, return_internal_reference<1>()), &Ellipse::setCenter)
+        .add_property("rx", make_function(&Ellipse::getRadiusX, return_internal_reference<1>()), &Ellipse::setRadiusX)
+        .add_property("ry", make_function(&Ellipse::getRadiusY, return_internal_reference<1>()), &Ellipse::setRadiusY)
+        .add_property("rotation", make_function(&Ellipse::getRotation, return_internal_reference<1>()), &Ellipse::setRotation)
+      ;
+    class_<Text, shared_ptr<Text> >(
             "Text",
             no_init
             )
-        // TODO
+        .add_property("uuid", make_function(&Text::getLayerName, return_value_policy<copy_const_reference>()))
+        .add_property("layerName", make_function(&Text::getLayerName, return_value_policy<copy_const_reference>()), &Text::setLayerName)
+        .add_property("position", make_function(&Text::getPosition, return_internal_reference<1>()), &Text::setPosition)
+        .add_property("rotation", make_function(&Text::getRotation, return_internal_reference<1>()), &Text::setRotation)
+        .add_property("height", make_function(&Text::getHeight, return_internal_reference<1>()), &Text::setHeight)
+        .add_property("text", make_function(&Text::getText, return_value_policy<copy_const_reference>()), &Text::setText)
         ;
 
     DECLARE_SERIALIZABLE_LIST(Polygon);

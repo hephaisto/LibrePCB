@@ -57,6 +57,9 @@ void init_library()
             init<FilePath, bool>()
             )
         .add_property("pins", make_function((SymbolPinList& (Symbol::*)() noexcept) &Symbol::getPins, return_internal_reference<1>()))
+        .add_property("polygons", make_function((PolygonList& (Symbol::*)() noexcept) &Symbol::getPolygons, return_internal_reference<1>()))
+        .add_property("ellipses", make_function((EllipseList& (Symbol::*)() noexcept) &Symbol::getEllipses, return_internal_reference<1>()))
+        .add_property("texts", make_function((TextList& (Symbol::*)() noexcept) &Symbol::getTexts, return_internal_reference<1>()))
 
 
 
