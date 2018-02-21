@@ -37,9 +37,6 @@ LIBS += \
 	-llibrepcbproject \
 	-llibrepcblibrary \
 	-llibrepcbcommon \
-	-llibrepcblibraryeditor \
-	-llibrepcblibrarymanager \
-	-llibrepcbprojecteditor \
 	-lsexpresso \
 	-lboost_python-py35 \
 
