@@ -133,6 +133,7 @@ class LibraryEditor final : public QMainWindow, public IF_GraphicsLayerProvider
         void rotateCcwTriggered() noexcept;
         void removeTriggered() noexcept;
         void abortCommandTriggered() noexcept;
+        void runPythonScriptTriggered() noexcept;
         void zoomInTriggered() noexcept;
         void zoomOutTriggered() noexcept;
         void zoomAllTriggered() noexcept;

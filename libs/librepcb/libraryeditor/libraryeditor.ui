@@ -209,6 +209,7 @@
    </attribute>
    <addaction name="actionAbortCommand"/>
    <addaction name="separator"/>
+   <addaction name="actionRunPythonScript"/>
   </widget>
   <widget class="QToolBar" name="toolsToolbar">
    <property name="windowTitle">
@@ -316,6 +317,18 @@
    </property>
    <property name="shortcut">
     <string>Esc</string>
+   </property>
+  </action>
+  <action name="actionRunPythonScript">
+   <property name="icon">
+    <iconset resource="../../../img/images.qrc">
+     <normaloff>:/img/actions/python_text_file.png</normaloff>:/img/actions/python_text_file.png</iconset>
+   </property>
+   <property name="text">
+    <string>Run Python script</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionZoomIn">

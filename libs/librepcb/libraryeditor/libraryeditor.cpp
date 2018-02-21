@@ -73,6 +73,8 @@ LibraryEditor::LibraryEditor(workspace::Workspace& ws, QSharedPointer<Library> l
             this, &LibraryEditor::removeTriggered);
     connect(mUi->actionAbortCommand, &QAction::triggered,
             this, &LibraryEditor::abortCommandTriggered);
+    connect(mUi->actionRunPythonScript, &QAction::triggered,
+            this, &LibraryEditor::runPythonScriptTriggered);
     connect(mUi->actionZoomIn, &QAction::triggered,
             this, &LibraryEditor::zoomInTriggered);
     connect(mUi->actionZoomOut, &QAction::triggered,
@@ -351,6 +353,11 @@ void LibraryEditor::removeTriggered() noexcept
 void LibraryEditor::abortCommandTriggered() noexcept
 {
     if (mCurrentEditorWidget) mCurrentEditorWidget->abortCommand();
+}
+
+void LibraryEditor::runPythonScriptTriggered() noexcept
+{
+    if (mCurrentEditorWidget) mCurrentEditorWidget->runPythonScript();
 }
 
 void LibraryEditor::zoomInTriggered() noexcept
