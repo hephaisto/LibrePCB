@@ -22,12 +22,14 @@ SOURCES += \
     core.cpp \
     geometry.cpp \
     library.cpp \
+    embedding.cpp \
 
 HEADERS += \
     qstring_converters.h \
     core.h \
     geometry.h \
     library.h \
+    embedding.h \
 
 
 FORMS += \
