@@ -9,12 +9,12 @@ SUBDIRS = \
     libraryeditor \
     projecteditor \
     librarymanager \
-	python
+    python \
 
 library.depends = common
 project.depends = library
 workspace.depends = project
 eagleimport.depends = workspace
-libraryeditor.depends = eagleimport
+libraryeditor.depends = eagleimport python
 projecteditor.depends = eagleimport
 librarymanager.depends = libraryeditor

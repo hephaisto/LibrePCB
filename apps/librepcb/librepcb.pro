@@ -49,7 +49,10 @@ LIBS += \
     -llibrepcblibrary \
     -llibrepcbcommon \
     -lsexpresso \
-    -lquazip -lz
+    -lquazip -lz \
+    -llibrepcbpy \
+    -lboost_python-py35 \
+    -lpython3.5m \
 
 INCLUDEPATH += \
     ../../libs/quazip \
