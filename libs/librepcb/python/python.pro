@@ -11,7 +11,7 @@ QT += core widgets network sql opengl printsupport
 
 #QMAKE_TARGET
 
-CONFIG += dynamiclib no_plugin_name_prefix
+CONFIG += dynamiclib
 
 INCLUDEPATH += \
     ../../

@@ -27,11 +27,10 @@ static void setApplicationMetadata() noexcept
 }
 
 
-void init_python_subsystem()
+void initStandalone()
 {
     // TODO only init qt stuff if standalone, not embedded
     setApplicationMetadata();
-    register_qstring_converters();
 }
 
 FilePath determineWorkspacePath()
@@ -45,7 +44,8 @@ FilePath determineWorkspacePath()
 
 BOOST_PYTHON_MODULE(librepcbpy)
 {
-    def("init", init_python_subsystem);
+    register_qstring_converters();
+    def("initStandalone", initStandalone);
     def("determineWorkspacePath", determineWorkspacePath);
 
     init_core();

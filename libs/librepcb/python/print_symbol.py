@@ -12,7 +12,7 @@ except IndexError:
     sys.exit(1)
 
 ## INIT
-lp.init()
+lp.initStandalone()
 
 ## find workspace
 wp = lp.determineWorkspacePath()
