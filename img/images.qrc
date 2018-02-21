@@ -38,6 +38,7 @@
         <file>actions/select_rect.png</file>
         <file>actions/settings.png</file>
         <file>actions/stop.png</file>
+        <file>actions/python_text_file.png</file>
         <file>actions/undo.png</file>
         <file>actions/zoom_all.png</file>
         <file>actions/zoom_in.png</file>
