@@ -120,6 +120,7 @@ class EditorWidgetBase : public QWidget
         virtual bool zoomOut() noexcept {return false;}
         virtual bool zoomAll() noexcept {return false;}
         virtual bool abortCommand() noexcept {return false;}
+        virtual bool runPythonScript() noexcept;
         virtual bool editGridProperties() noexcept {return false;}
 
 

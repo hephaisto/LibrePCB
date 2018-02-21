@@ -36,6 +36,7 @@
 #include <librepcb/common/graphics/ellipsegraphicsitem.h>
 #include <librepcb/common/graphics/graphicslayer.h>
 #include <librepcb/common/dialogs/gridsettingsdialog.h>
+#include "../../python/embedding.h"
 
 /*****************************************************************************************
  *  Namespace
@@ -289,6 +290,11 @@ bool SymbolEditorWidget::isInterfaceBroken() const noexcept
     return mSymbol->getPins().getUuidSet() != mOriginalSymbolPinUuids;
 }
 
+bool SymbolEditorWidget::runPythonScript() noexcept
+{
+    librepcb::python::runScript("embedding.py", mSymbol.data());
+    return true;
+}
 /*****************************************************************************************
  *  End of File
  ****************************************************************************************/

@@ -29,6 +29,7 @@
 #include <librepcb/common/utils/toolbarproxy.h>
 #include <librepcb/workspace/workspace.h>
 #include <librepcb/workspace/settings/workspacesettings.h>
+#include "../../python/embedding.h"
 
 /*****************************************************************************************
  *  Namespace
@@ -184,6 +185,11 @@ void EditorWidgetBase::undoStackCleanChanged(bool clean) noexcept
     emit dirtyChanged(isDirty());
 }
 
+bool EditorWidgetBase::runPythonScript() noexcept
+{
+    librepcb::python::runScript("embedding.py");
+    return true;
+}
 /*****************************************************************************************
  *  End of File
  ****************************************************************************************/

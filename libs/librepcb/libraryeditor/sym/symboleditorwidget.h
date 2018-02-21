@@ -95,6 +95,7 @@ class SymbolEditorWidget final : public EditorWidgetBase, public IF_GraphicsView
         bool zoomOut() noexcept override;
         bool zoomAll() noexcept override;
         bool abortCommand() noexcept override;
+        virtual bool runPythonScript() noexcept override;
         bool editGridProperties() noexcept override;
 
 
