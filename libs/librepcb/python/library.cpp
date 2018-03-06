@@ -1,8 +1,10 @@
 #include <boost/python.hpp>
 
 #include "../library/sym/symbol.h"
+#include "../library/sym/cmd/cmdsymbolpinedit.h"
 
 #include "serializablelist.h"
+#include "propertywrapper.h"
 
 #include "library.h"
 
@@ -23,23 +25,21 @@ using namespace librepcb::library;
 
 void init_library()
 {
-    class_<SymbolPin, shared_ptr<SymbolPin> >(
+    // SymbolPin
+    auto symbolPinClass = class_<SymbolPin, shared_ptr<SymbolPin> >(
             "SymbolPin",
             init<const Uuid&, const QString&, const Point&, const Length&, const Angle&>()
             )
         .add_property("uuid", make_function(&SymbolPin::getUuid, return_value_policy<copy_const_reference>()))
-        .add_property("name", make_function(&SymbolPin::getName, return_value_policy<copy_const_reference>()), &SymbolPin::setName)
-        .add_property("position", make_function(&SymbolPin::getPosition, return_internal_reference<1>()), &SymbolPin::setPosition)
-        .add_property("length", make_function(&SymbolPin::getLength, return_internal_reference<1>()), &SymbolPin::setLength)
-        .add_property("rotation", make_function(&SymbolPin::getRotation, return_internal_reference<1>()), &SymbolPin::setRotation)
-        .def("getName", &SymbolPin::getName, return_value_policy<copy_const_reference>())
-        .def("getPosition", &SymbolPin::getPosition, return_internal_reference<1>())
-        .def("getLength", &SymbolPin::getLength, return_internal_reference<1>())
-        .def("getRotation", &SymbolPin::getRotation, return_internal_reference<1>())
         ;
+    ADD_WRAPPED_PROPERTY(symbolPinClass, SymbolPin, QString, Name, "name");
+    ADD_WRAPPED_PROPERTY(symbolPinClass, SymbolPin, Point, Position, "position");
+    ADD_WRAPPED_PROPERTY(symbolPinClass, SymbolPin, Length, Length, "length");
+    ADD_WRAPPED_PROPERTY(symbolPinClass, SymbolPin, Angle, Rotation, "rotation");
 
     DECLARE_SERIALIZABLE_LIST(SymbolPin);
 
+    // LibraryBaseElement
     class_<LibraryBaseElement, boost::noncopyable>(
             "LibraryBaseElement",
             no_init
@@ -52,19 +52,23 @@ void init_library()
         .add_property("deprecated", &LibraryBaseElement::isDeprecated, &LibraryBaseElement::setDeprecated)
         ;
 
-    class_<Symbol, bases<LibraryBaseElement>, boost::noncopyable>(
+    // Symbol
+    auto symbolClass = class_<Symbol, bases<LibraryBaseElement>, boost::noncopyable>(
             "Symbol",
             init<FilePath, bool>()
             )
-        .add_property("pins", make_function((SymbolPinList& (Symbol::*)() noexcept) &Symbol::getPins, return_internal_reference<1>()))
-        .add_property("polygons", make_function((PolygonList& (Symbol::*)() noexcept) &Symbol::getPolygons, return_internal_reference<1>()))
-        .add_property("ellipses", make_function((EllipseList& (Symbol::*)() noexcept) &Symbol::getEllipses, return_internal_reference<1>()))
-        .add_property("texts", make_function((TextList& (Symbol::*)() noexcept) &Symbol::getTexts, return_internal_reference<1>()))
+        //.add_property("polygons", make_function((PolygonList& (Symbol::*)() noexcept) &Symbol::getPolygons, return_internal_reference<1>()))
+        //.add_property("ellipses", make_function((EllipseList& (Symbol::*)() noexcept) &Symbol::getEllipses, return_internal_reference<1>()))
 
 
 
         .def("save", &Symbol::save)
         ;
+    ADD_LIST_PROPERTY(symbolClass, Symbol, SymbolPin, Pins, "pins");
+    ADD_LIST_PROPERTY(symbolClass, Symbol, Text, Texts, "texts");
+    ADD_LIST_PROPERTY(symbolClass, Symbol, Polygon, Polygons, "polygons");
+    ADD_LIST_PROPERTY(symbolClass, Symbol, Ellipse, Ellipses, "ellipses");
+    //addListProperty<SymbolPin, SymbolPinListNameProvider, Symbol, decltype(symbolClass), (SymbolPinList& (Symbol::*)() noexcept) (&Symbol::getPins)>("pins", symbolClass);
 }
 
 }

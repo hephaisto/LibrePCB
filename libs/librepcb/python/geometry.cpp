@@ -3,11 +3,18 @@
 #include "../common/units/length.h"
 #include "../common/units/point.h"
 #include "../common/units/angle.h"
+
 #include "../common/geometry/polygon.h"
+#include "../common/geometry/cmd/cmdpolygonedit.h"
+
 #include "../common/geometry/ellipse.h"
+#include "../common/geometry/cmd/cmdellipseedit.h"
+
 #include "../common/geometry/text.h"
+#include "../common/geometry/cmd/cmdtextedit.h"
 
 #include "serializablelist.h"
+#include "propertywrapper.h"
 
 #include "geometry.h"
 
@@ -87,14 +94,19 @@ void init_geometry()
         .def(self == other<qint32>())
         ;
 
-    // geometric objects
-    class_<Polygon, shared_ptr<Polygon> >(
+    // GEOMETRIC OBJECTS
+
+    // polygon
+    auto polygonClass = class_<Polygon, shared_ptr<Polygon> >(
             "Polygon",
             no_init
             )
         .add_property("layerName", make_function(&Polygon::getLayerName, return_value_policy<copy_const_reference>()), &Polygon::setLayerName)
         ;
-    class_<Ellipse, shared_ptr<Ellipse> >(
+    ADD_WRAPPED_PROPERTY(polygonClass, Polygon, QString, LayerName, "layerName");
+
+    // ellipse
+    auto ellipseClass = class_<Ellipse, shared_ptr<Ellipse> >(
             "Ellipse",
             no_init
             )
@@ -106,7 +118,15 @@ void init_geometry()
         .add_property("ry", make_function(&Ellipse::getRadiusY, return_internal_reference<1>()), &Ellipse::setRadiusY)
         .add_property("rotation", make_function(&Ellipse::getRotation, return_internal_reference<1>()), &Ellipse::setRotation)
       ;
-    class_<Text, shared_ptr<Text> >(
+    ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, QString, LayerName, "layerName");
+    ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, Length, LineWidth, "lineWidth");
+    ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, Point, Center, "center");
+    ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, Length, RadiusX, "rx");
+    ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, Length, RadiusY, "ry");
+    ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, Angle, Rotation, "rotation");
+
+    // text
+    auto textClass = class_<Text, shared_ptr<Text> >(
             "Text",
             no_init
             )
@@ -117,6 +137,11 @@ void init_geometry()
         .add_property("height", make_function(&Text::getHeight, return_internal_reference<1>()), &Text::setHeight)
         .add_property("text", make_function(&Text::getText, return_value_policy<copy_const_reference>()), &Text::setText)
         ;
+    ADD_WRAPPED_PROPERTY(textClass, Text, QString, LayerName, "layerName");
+    ADD_WRAPPED_PROPERTY(textClass, Text, Point, Position, "position");
+    ADD_WRAPPED_PROPERTY(textClass, Text, Angle, Rotation, "rotation");
+    ADD_WRAPPED_PROPERTY(textClass, Text, Length, Height, "height");
+    ADD_WRAPPED_PROPERTY(textClass, Text, QString, Text, "text");
 
     DECLARE_SERIALIZABLE_LIST(Polygon);
     DECLARE_SERIALIZABLE_LIST(Ellipse);

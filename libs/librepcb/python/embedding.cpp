@@ -21,6 +21,50 @@ using boost::python::handle;
 using boost::python::extract;
 using boost::python::ptr;
 
+/*ScriptingEnvironment::ScriptingEnvironment():
+mUndoStack(nullptr),
+mSymbol(nullptr)
+{
+    registerInstance();
+}*/
+
+ScriptingEnvironment::ScriptingEnvironment(UndoStack *undoStack):
+mUndoStack(undoStack),
+mSymbol(nullptr)
+{
+    registerInstance();
+}
+
+ScriptingEnvironment::~ScriptingEnvironment() noexcept
+{
+    currentInstance = nullptr;
+}
+
+void ScriptingEnvironment::registerInstance()
+{
+    Q_ASSERT(!currentInstance);
+    currentInstance = this;
+}
+ScriptingEnvironment* ScriptingEnvironment::instance()
+{
+    return currentInstance;
+}
+
+UndoStack* ScriptingEnvironment::getUndoStack() const noexcept
+{
+    return mUndoStack;
+}
+
+void ScriptingEnvironment::setSymbol(librepcb::library::Symbol *symbol)
+{
+    mSymbol = symbol;
+}
+
+librepcb::library::Symbol* ScriptingEnvironment::getSymbol() const noexcept
+{
+    return mSymbol;
+}
+
 bool embedding_initialized = false;
 void initEmbeddingIfNecessary()
 {
@@ -67,12 +111,15 @@ std::wstring getPythonTraceback()
     return result;
 }
 
-void runScript(const QString &filename, librepcb::library::Symbol *symbol)
+void ScriptingEnvironment::runScript(const QString &filename)
 {
     try
     {
         qInfo() << "running script " << filename;
         initEmbeddingIfNecessary();
+
+        mUndoStack->beginCmdGroup(tr("execute script %1").arg(filename));
+
         object main_module = import("__main__");
         object main_namespace = main_module.attr("__dict__"); // copy!
         //object cpp_module( (handle<>(PyImport_ImportModule("Heinz"))) );
@@ -80,7 +127,7 @@ void runScript(const QString &filename, librepcb::library::Symbol *symbol)
         main_namespace["lp"] = cppModule;
         
 
-        main_namespace["symbol"] = ptr(symbol);
+        main_namespace["symbol"] = ptr(mSymbol);
 
         #ifdef WORKAROUND_DOUBLE_FREE
             std::ifstream in(filename.toStdString());
@@ -91,11 +138,24 @@ void runScript(const QString &filename, librepcb::library::Symbol *symbol)
         #endif
 
         qInfo() << "script " << filename << " exited normally";
+        mUndoStack->commitCmdGroup();
     }
     catch(error_already_set const &)
     {
+        mUndoStack->abortCmdGroup();
+        QString traceback(QString::fromStdWString(getPythonTraceback()));
+
         qWarning() << "Error in python script";
-        qWarning().noquote() << QString::fromStdWString(getPythonTraceback());
+        qWarning().noquote() << traceback;
+
+        QMessageBox msgBox;
+        msgBox.setText(tr("Python error"));
+        msgBox.setInformativeText(tr("Error while executing %1").arg(filename));
+        msgBox.setDetailedText(traceback);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+
+
         /*try
         {
             PyObject* ptype;
@@ -133,6 +193,7 @@ void runScript(const QString &filename, librepcb::library::Symbol *symbol)
 }
 
 
+ScriptingEnvironment* ScriptingEnvironment::currentInstance = nullptr;
 
 
 } // python

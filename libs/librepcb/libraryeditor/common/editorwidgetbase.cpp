@@ -187,7 +187,8 @@ void EditorWidgetBase::undoStackCleanChanged(bool clean) noexcept
 
 bool EditorWidgetBase::runPythonScript() noexcept
 {
-    librepcb::python::runScript("embedding.py");
+    librepcb::python::ScriptingEnvironment py(mUndoStack.data());
+    py.runScript("embedding.py");
     return true;
 }
 /*****************************************************************************************

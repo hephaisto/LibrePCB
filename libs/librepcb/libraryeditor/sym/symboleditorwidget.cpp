@@ -292,7 +292,9 @@ bool SymbolEditorWidget::isInterfaceBroken() const noexcept
 
 bool SymbolEditorWidget::runPythonScript() noexcept
 {
-    librepcb::python::runScript("embedding.py", mSymbol.data());
+    librepcb::python::ScriptingEnvironment py(mUndoStack.data());
+    py.setSymbol(mSymbol.data());
+    py.runScript("embedding.py");
     return true;
 }
 /*****************************************************************************************
