@@ -10,6 +10,8 @@ environment:
     MINGW: C:\Qt\Tools\mingw530_32
     QTDIR: C:\Qt\5.9.3\mingw53_32
     VCRT_DIR: 'C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Redist\x86\Microsoft.VC120.CRT'
+    BOOST_ROOT: C:\Libraries\boost_1_65_0
+    BOOST_LIBRARYDIR: C:\Libraries\boost_1_65_0\lib64-msvc-14.0
 
 init:
   - set PATH=%QTDIR%\bin;%MINGW%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
