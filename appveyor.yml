@@ -10,11 +10,29 @@ environment:
     MINGW: C:\Qt\Tools\mingw530_32
     QTDIR: C:\Qt\5.9.3\mingw53_32
     VCRT_DIR: 'C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Redist\x86\Microsoft.VC120.CRT'
-    BOOST_ROOT: C:\Libraries\boost_1_62_0
-    BOOST_LIBRARYDIR: C:\Libraries\boost_1_62_0\lib64-msvc-14.0
+
+    BOOST_FILENAME_VERSION: 1_64_0
+    BOOST_VERSION: 1.64.0
 
 init:
   - set PATH=%QTDIR%\bin;%MINGW%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
+  - ps: |
+      # from https://github.com/datastax/cpp-driver/blob/master/appveyor.yml
+      # Determine the platform and create associate environment variables
+      If ($env:Platform -Match "x86") {
+        $env:ARCHITECTURE="32"
+      } Else {
+        $env:ARCHITECTURE="64"
+        $env:CMAKE_GENERATOR_SUFFIX=" Win64"
+      }
+      $env:LIB_ARCHITECTURE="lib$($env:ARCHITECTURE)"
+      $env:WINDOWS_ARCHITECTURE="win$($env:ARCHITECTURE)"
+      # Generate the default Boost environment variables
+      $env:BOOST_ROOT="C:/Libraries/boost_$($env:BOOST_FILENAME_VERSION)"
+      $env:BOOST_INCLUDEDIR="$($env:BOOST_ROOT)"
+      $env:BOOST_LIBRARYDIR="$($env:BOOST_ROOT)/$($env:LIB_ARCHITECTURE)-msvc-$($env:VISUAL_STUDIO_VERSION)"
+      $env:BOOST_ARCHIVE="boost_$($env:BOOST_FILENAME_VERSION)-bin-msvc-$($env:VISUAL_STUDIO_VERSION)-$($env:ARCHITECTURE).7z"
+
 
 install:
   - git submodule update --init --recursive
