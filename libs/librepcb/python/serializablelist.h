@@ -1,3 +1,4 @@
+#include "hypot_workaround.hpp"
 #include <boost/python.hpp>
 using std::shared_ptr;
 

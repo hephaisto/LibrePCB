@@ -4,6 +4,7 @@
 #include <fstream>
 #endif
 
+#include "hypot_workaround.hpp"
 #include <boost/python.hpp>
 #include <QDebug>
 #include <QString>

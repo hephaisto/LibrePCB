@@ -1,3 +1,4 @@
+#include "hypot_workaround.hpp"
 #include <boost/python.hpp>
 
 #include "../library/sym/symbol.h"

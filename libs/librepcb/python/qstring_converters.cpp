@@ -1,4 +1,5 @@
 // thanks to https://misspent.wordpress.com/2009/09/27/how-to-write-boost-python-converters/
+#include "hypot_workaround.hpp"
 #include <boost/python.hpp>
 #include <QString>
 #include <Python.h>
