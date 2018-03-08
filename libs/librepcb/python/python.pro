@@ -52,13 +52,18 @@ LIBS += \
 	-lsexpresso \
 	-lboost_python-py35 \
 
+QMAKE_LFLAGS += \
+    "-L$$DESTDIR" \
 unix {
     QMAKE_CXXFLAGS += \
         "$$system(python3-config --cflags)"
 
     QMAKE_LFLAGS += \
         "$$system(python3-config --ldflags)" \
-        "-L$$DESTDIR" \
+}
+win32 {
+    INCLUDEPATH += $$(PYTHON_INCLUDEDIR)
+    QMAKE_LFLAGS += "-L$$(PYTHON_LIBRARYDIR)"
 }
 
 DEFINES += BOOST_PYTHON_DYNAMIC_LIB

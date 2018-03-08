@@ -16,6 +16,8 @@ environment:
     BOOST_VERSION: 1.63.0
     APPVEYOR_RDP_PASSWORD: 9f16DvSVGUfdtFvoURIe
 
+    PYTHON_VERSION: 35
+
 init:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   - set PATH=%QTDIR%\bin;%MINGW%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
@@ -35,6 +37,12 @@ init:
       $env:BOOST_INCLUDEDIR="$($env:BOOST_ROOT)"
       $env:BOOST_LIBRARYDIR="$($env:BOOST_ROOT)/$($env:LIB_ARCHITECTURE)-msvc-$($env:VISUAL_STUDIO_VERSION)"
       $env:BOOST_ARCHIVE="boost_$($env:BOOST_FILENAME_VERSION)-bin-msvc-$($env:VISUAL_STUDIO_VERSION)-$($env:ARCHITECTURE).7z"
+
+      # same for python
+      $env:PYTHON_ROOT="C:/Python$($env:PYTHON_VERSION)"
+      $env:PYTHON_INCLUDEDIR="$($env:PYTHON_ROOT)/include"
+      $env:PYTHON_LIBRARYDIR="$($env:PYTHON_ROOT)/libs"
+
 
 
 install:
