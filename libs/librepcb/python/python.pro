@@ -17,13 +17,13 @@ INCLUDEPATH += \
     ../../
 
 # load boost
-_BOOST_ROOT = $$(BOOST_ROOT)
-isEmpty(_BOOST_ROOT) {
-    message(warning: `BOOST_ROOT` environment variable not defined)
+_BOOST_INCLUDEDIR = $$(BOOST_INCLUDEDIR)
+isEmpty(_BOOST_INCLUDEDIR) {
+    message(warning: `BOOST_INCLUDEDIR` environment variable not defined)
 }
 else
 {
-    INCLUDEPATH += $$_BOOST_ROOT
+    INCLUDEPATH += $$_BOOST_INCLUDEDIR
 }
 
 SOURCES += \
@@ -52,11 +52,13 @@ LIBS += \
 	-lsexpresso \
 	-lboost_python-py35 \
 
-QMAKE_CXXFLAGS += \
-	"$$system(python3-config --cflags)"
+unix {
+    QMAKE_CXXFLAGS += \
+        "$$system(python3-config --cflags)"
 
-QMAKE_LFLAGS += \
-	"$$system(python3-config --ldflags)" \
-	"-L$$DESTDIR" \
+    QMAKE_LFLAGS += \
+        "$$system(python3-config --ldflags)" \
+        "-L$$DESTDIR" \
+}
 
 DEFINES += BOOST_PYTHON_DYNAMIC_LIB
