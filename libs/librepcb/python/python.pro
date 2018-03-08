@@ -49,8 +49,19 @@ LIBS += \
 	-llibrepcbproject \
 	-llibrepcblibrary \
 	-llibrepcbcommon \
-	-lsexpresso \
-	-lboost_python-py35 \
+	-lsexpresso
+
+
+unix {
+
+    LIBS += \
+	    -lboost_python-py35
+}
+win32 {
+    LIBS += \
+        -L$$(BOOST_LIBRARY_DIR)
+        -l$$(BOOST_PYTHON_LIB_FILENAME)
+}
 
 QMAKE_LFLAGS += \
     "-L$$DESTDIR" \

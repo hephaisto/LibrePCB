@@ -13,10 +13,13 @@ environment:
     VCRT_DIR: 'C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Redist\x86\Microsoft.VC120.CRT'
 
     BOOST_FILENAME_VERSION: 1_63_0
+    BOOST_FILENAME_VERSION_SHORT: 1_63
     BOOST_VERSION: 1.63.0
     APPVEYOR_RDP_PASSWORD: 9f16DvSVGUfdtFvoURIe
 
     PYTHON_VERSION: 35
+    VISUAL_STUDIO_VERSION: 14.0
+    VISUAL_STUDIO_FILENAME_VERSION: 140
 
 init:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
@@ -37,6 +40,7 @@ init:
       $env:BOOST_INCLUDEDIR="$($env:BOOST_ROOT)"
       $env:BOOST_LIBRARYDIR="$($env:BOOST_ROOT)/$($env:LIB_ARCHITECTURE)-msvc-$($env:VISUAL_STUDIO_VERSION)"
       $env:BOOST_ARCHIVE="boost_$($env:BOOST_FILENAME_VERSION)-bin-msvc-$($env:VISUAL_STUDIO_VERSION)-$($env:ARCHITECTURE).7z"
+      $env:BOOST_PYTHON_LIB_FILENAME="boost_python-vc$($env:VISUAL_STUDIO_FILENAME_VERSION)-mt-{BOOST_FILENAME_VERSION_SHORT}"
       # same for python
       $env:PYTHON_ROOT="C:/Python$($env:PYTHON_VERSION)"
       $env:PYTHON_INCLUDEDIR="$($env:PYTHON_ROOT)/include"
