@@ -16,6 +16,16 @@ CONFIG += dynamiclib
 INCLUDEPATH += \
     ../../
 
+# load boost
+_BOOST_ROOT = $$(BOOST_ROOT)
+isEmpty(_BOOST_ROOT) {
+    message(warning: `BOOST_ROOT` environment variable not defined)
+}
+else
+{
+    INCLUDEPATH += $$_BOOST_ROOT
+}
+
 SOURCES += \
     librepcbpy.cpp \
     qstring_converters.cpp \
