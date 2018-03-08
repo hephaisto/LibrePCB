@@ -12,8 +12,8 @@ environment:
     QTDIR: C:\Qt\5.9.3\mingw53_32
     VCRT_DIR: 'C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Redist\x86\Microsoft.VC120.CRT'
 
-    BOOST_FILENAME_VERSION: 1_64_0
-    BOOST_VERSION: 1.64.0
+    BOOST_FILENAME_VERSION: 1_63_0
+    BOOST_VERSION: 1.63.0
     APPVEYOR_RDP_PASSWORD: 9f16DvSVGUfdtFvoURIe
 
 init:
