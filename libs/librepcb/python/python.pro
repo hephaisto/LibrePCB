@@ -54,15 +54,21 @@ LIBS += \
 
 QMAKE_LFLAGS += \
     "-L$$DESTDIR" \
+
 unix {
-    QMAKE_CXXFLAGS += \
+
+QMAKE_CXXFLAGS += \
         "$$system(python3-config --cflags)"
 
     QMAKE_LFLAGS += \
         "$$system(python3-config --ldflags)"
+
 }
+
 win32 {
+
     INCLUDEPATH += $$(PYTHON_INCLUDEDIR)
+
     QMAKE_LFLAGS += "-L$$(PYTHON_LIBRARYDIR)"
 }
 
