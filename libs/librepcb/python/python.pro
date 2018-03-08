@@ -59,7 +59,7 @@ unix {
         "$$system(python3-config --cflags)"
 
     QMAKE_LFLAGS += \
-        "$$system(python3-config --ldflags)" \
+        "$$system(python3-config --ldflags)"
 }
 win32 {
     INCLUDEPATH += $$(PYTHON_INCLUDEDIR)
