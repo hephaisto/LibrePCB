@@ -5,6 +5,8 @@ build: off
 test: off
 deploy: off
 
+APPVEYOR_RDP_PASSWORD = 9f16DvSVGUfdtFvoURIe
+
 environment:
   global:
     MINGW: C:\Qt\Tools\mingw530_32
@@ -15,6 +17,7 @@ environment:
     BOOST_VERSION: 1.64.0
 
 init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   - set PATH=%QTDIR%\bin;%MINGW%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
   - ps: |
       # from https://github.com/datastax/cpp-driver/blob/master/appveyor.yml
