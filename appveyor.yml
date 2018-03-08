@@ -40,7 +40,7 @@ init:
       $env:BOOST_INCLUDEDIR="$($env:BOOST_ROOT)"
       $env:BOOST_LIBRARYDIR="$($env:BOOST_ROOT)/$($env:LIB_ARCHITECTURE)-msvc-$($env:VISUAL_STUDIO_VERSION)"
       $env:BOOST_ARCHIVE="boost_$($env:BOOST_FILENAME_VERSION)-bin-msvc-$($env:VISUAL_STUDIO_VERSION)-$($env:ARCHITECTURE).7z"
-      $env:BOOST_PYTHON_LIB_FILENAME="boost_python-vc$($env:VISUAL_STUDIO_FILENAME_VERSION)-mt-{BOOST_FILENAME_VERSION_SHORT}"
+      $env:BOOST_PYTHON_LIB_FILENAME="boost_python-vc$($env:VISUAL_STUDIO_FILENAME_VERSION)-mt-($env:BOOST_FILENAME_VERSION_SHORT)"
       # same for python
       $env:PYTHON_ROOT="C:/Python$($env:PYTHON_VERSION)"
       $env:PYTHON_INCLUDEDIR="$($env:PYTHON_ROOT)/include"
