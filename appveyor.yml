@@ -5,7 +5,7 @@ build: off
 test: off
 deploy: off
 
-APPVEYOR_RDP_PASSWORD = 9f16DvSVGUfdtFvoURIe
+APPVEYOR_RDP_PASSWORD: 9f16DvSVGUfdtFvoURIe
 
 environment:
   global:
