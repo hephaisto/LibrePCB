@@ -51,5 +51,7 @@ void addWrappedProperty(const char *name, PythonClass &cls)
 // usage: ADD_WRAPPED_PROPERTY(symbolPinClass, SymbolPin, QString, Name, "name")
 #define ADD_WRAPPED_PROPERTY(pythonClassObject, className, propertyType, uppercaseProperty, propertyName) addWrappedProperty<decltype(pythonClassObject), className, propertyType, Cmd##className##Edit, &className::get##uppercaseProperty, &className::set##uppercaseProperty, &Cmd##className##Edit::set##uppercaseProperty>(propertyName, pythonClassObject)
 
+#define ADD_WRAPPED_BOOL_PROPERTY(pythonClassObject, className, propertyType, uppercaseProperty, propertyName) addWrappedProperty<decltype(pythonClassObject), className, propertyType, Cmd##className##Edit, &className::is#uppercaseProperty, &className::setIs##uppercaseProperty, &Cmd##className##Edit::setIs##uppercaseProperty>(propertyName, pythonClassObject)
+
 }
 }
