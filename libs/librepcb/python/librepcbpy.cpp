@@ -51,6 +51,7 @@ BOOST_PYTHON_MODULE(librepcbpy)
     init_core();
     init_geometry();
     sym::init();
+    pkg::init();
 }
 
 
