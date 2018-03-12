@@ -132,6 +132,17 @@ void init_geometry()
     ADD_WRAPPED_PROPERTY(textClass, Text, Length, Height, "height");
     ADD_WRAPPED_PROPERTY(textClass, Text, QString, Text, "text");
 
+
+	auto holeClass = class_<Hole, shared_ptr<Hole> >(
+			"Hole",
+			init<const Uuid&, const Point&, const Length&>
+			)
+        .add_property("uuid", make_function(&Hole::getUuid, return_value_policy<copy_const_reference>()))
+		;
+    ADD_WRAPPED_PROPERTY(holeClass, Hole, Point, Position, "position");
+    ADD_WRAPPED_PROPERTY(holeClass, Hole, Length, Diameter, "diameter");
+
+	// list declarations
     DECLARE_SERIALIZABLE_LIST(Polygon);
     DECLARE_SERIALIZABLE_LIST(Ellipse);
     DECLARE_SERIALIZABLE_LIST(Text);
