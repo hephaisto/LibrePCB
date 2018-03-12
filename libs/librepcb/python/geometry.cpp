@@ -111,12 +111,6 @@ void init_geometry()
             no_init
             )
         .add_property("uuid", make_function(&Ellipse::getLayerName, return_value_policy<copy_const_reference>()))
-        .add_property("layerName", make_function(&Ellipse::getLayerName, return_value_policy<copy_const_reference>()), &Ellipse::setLayerName)
-        .add_property("lineWidth", make_function(&Ellipse::getLineWidth, return_internal_reference<1>()), &Ellipse::setLineWidth)
-        .add_property("center", make_function(&Ellipse::getCenter, return_internal_reference<1>()), &Ellipse::setCenter)
-        .add_property("rx", make_function(&Ellipse::getRadiusX, return_internal_reference<1>()), &Ellipse::setRadiusX)
-        .add_property("ry", make_function(&Ellipse::getRadiusY, return_internal_reference<1>()), &Ellipse::setRadiusY)
-        .add_property("rotation", make_function(&Ellipse::getRotation, return_internal_reference<1>()), &Ellipse::setRotation)
       ;
     ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, QString, LayerName, "layerName");
     ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, Length, LineWidth, "lineWidth");
@@ -130,12 +124,7 @@ void init_geometry()
             "Text",
             no_init
             )
-        .add_property("uuid", make_function(&Text::getLayerName, return_value_policy<copy_const_reference>()))
-        .add_property("layerName", make_function(&Text::getLayerName, return_value_policy<copy_const_reference>()), &Text::setLayerName)
-        .add_property("position", make_function(&Text::getPosition, return_internal_reference<1>()), &Text::setPosition)
-        .add_property("rotation", make_function(&Text::getRotation, return_internal_reference<1>()), &Text::setRotation)
-        .add_property("height", make_function(&Text::getHeight, return_internal_reference<1>()), &Text::setHeight)
-        .add_property("text", make_function(&Text::getText, return_value_policy<copy_const_reference>()), &Text::setText)
+        .add_property("uuid", make_function(&Text::getUuid, return_value_policy<copy_const_reference>()))
         ;
     ADD_WRAPPED_PROPERTY(textClass, Text, QString, LayerName, "layerName");
     ADD_WRAPPED_PROPERTY(textClass, Text, Point, Position, "position");
