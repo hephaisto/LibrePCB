@@ -12,6 +12,7 @@
 #include "symbol.h"
 #include "package.h"
 #include "component.h"
+#include "device.h"
 
 namespace librepcb {
 namespace python {
@@ -55,6 +56,7 @@ BOOST_PYTHON_MODULE(librepcbpy)
     sym::init();
     pkg::init();
     cmp::init();
+    dev::init();
 }
 
 
