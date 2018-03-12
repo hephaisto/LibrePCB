@@ -9,7 +9,7 @@
 
 #include "core.h"
 #include "geometry.h"
-#include "library.h"
+#include "sym.h"
 
 namespace librepcb {
 namespace python {
@@ -50,7 +50,7 @@ BOOST_PYTHON_MODULE(librepcbpy)
 
     init_core();
     init_geometry();
-    init_library();
+    sym::init();
 }
 
 

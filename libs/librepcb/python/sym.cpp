@@ -11,6 +11,8 @@
 namespace librepcb {
 namespace python {
 
+namespace sym {
+
 using std::shared_ptr;
 using boost::python::class_;
 using boost::python::init;
@@ -23,7 +25,7 @@ using boost::python::bases;
 
 using namespace librepcb::library;
 
-void init_library()
+void init()
 {
     // SymbolPin
     auto symbolPinClass = class_<SymbolPin, shared_ptr<SymbolPin> >(
@@ -69,6 +71,8 @@ void init_library()
     ADD_LIST_PROPERTY(symbolClass, Symbol, Polygon, Polygons, "polygons");
     ADD_LIST_PROPERTY(symbolClass, Symbol, Ellipse, Ellipses, "ellipses");
     //addListProperty<SymbolPin, SymbolPinListNameProvider, Symbol, decltype(symbolClass), (SymbolPinList& (Symbol::*)() noexcept) (&Symbol::getPins)>("pins", symbolClass);
+}
+
 }
 
 }
