@@ -9,7 +9,7 @@
 
 #include "core.h"
 #include "geometry.h"
-#include "sym.h"
+#include "symbol.h"
 
 namespace librepcb {
 namespace python {
