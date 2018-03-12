@@ -5,7 +5,7 @@
 #include "serializablelist.h"
 #include "propertywrapper.h"
 
-#include "library.h"
+#include "package.h"
 
 namespace librepcb {
 namespace python {
