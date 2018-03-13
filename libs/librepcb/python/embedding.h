@@ -16,9 +16,15 @@ public:
     // getters
     UndoStack *getUndoStack() const noexcept;
     librepcb::library::Symbol* getSymbol() const noexcept;
+    librepcb::library::Package* getPackage() const noexcept;
+    librepcb::library::Component* getComponent() const noexcept;
+    librepcb::library::Device* getDevice() const noexcept;
 
     // setters
     void setSymbol(librepcb::library::Symbol *symbol);
+    void setPackage(librepcb::library::Package *package);
+    void setComponent(librepcb::library::Component *component);
+    void setDevice(librepcb::library::Device *device);
 
     // run script
     void runScript(const QString &filename);
@@ -31,6 +37,9 @@ private:
     static ScriptingEnvironment *currentInstance;
 
     librepcb::library::Symbol *mSymbol;
+    librepcb::library::Package *mPackage;
+    librepcb::library::Component *mComponent;
+    librepcb::library::Device *mDevice;
     UndoStack *mUndoStack;
 };
 

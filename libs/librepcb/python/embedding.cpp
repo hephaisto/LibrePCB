@@ -30,7 +30,10 @@ mSymbol(nullptr)
 
 ScriptingEnvironment::ScriptingEnvironment(UndoStack *undoStack):
 mUndoStack(undoStack),
-mSymbol(nullptr)
+mSymbol(nullptr),
+mPackage(nullptr),
+mComponent(nullptr),
+mDevice(nullptr)
 {
     registerInstance();
 }
@@ -55,6 +58,7 @@ UndoStack* ScriptingEnvironment::getUndoStack() const noexcept
     return mUndoStack;
 }
 
+// symbol
 void ScriptingEnvironment::setSymbol(librepcb::library::Symbol *symbol)
 {
     mSymbol = symbol;
@@ -63,6 +67,42 @@ void ScriptingEnvironment::setSymbol(librepcb::library::Symbol *symbol)
 librepcb::library::Symbol* ScriptingEnvironment::getSymbol() const noexcept
 {
     return mSymbol;
+}
+
+
+// package
+void ScriptingEnvironment::setPackage(librepcb::library::Package *package)
+{
+    mPackage = package;
+}
+
+librepcb::library::Package* ScriptingEnvironment::getPackage() const noexcept
+{
+    return mPackage;
+}
+
+
+// component
+void ScriptingEnvironment::setComponent(librepcb::library::Component *component)
+{
+    mComponent = component;
+}
+
+librepcb::library::Component* ScriptingEnvironment::getComponent() const noexcept
+{
+    return mComponent;
+}
+
+
+// device
+void ScriptingEnvironment::setDevice(librepcb::library::Device *device)
+{
+    mDevice = device;
+}
+
+librepcb::library::Device* ScriptingEnvironment::getDevice() const noexcept
+{
+    return mDevice;
 }
 
 bool embedding_initialized = false;
