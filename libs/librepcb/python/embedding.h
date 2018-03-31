@@ -1,4 +1,8 @@
 #include "../library/sym/symbol.h"
+#include "../library/pkg/package.h"
+#include "../library/cmp/component.h"
+#include "../library/dev/device.h"
+
 #include "../common/undostack.h"
 
 namespace librepcb {

@@ -13,6 +13,9 @@
 #include "../common/geometry/text.h"
 #include "../common/geometry/cmd/cmdtextedit.h"
 
+#include "../common/geometry/hole.h"
+#include "../common/geometry/cmd/cmdholeedit.h"
+
 #include "serializablelist.h"
 #include "propertywrapper.h"
 
@@ -135,7 +138,7 @@ void init_geometry()
 
 	auto holeClass = class_<Hole, shared_ptr<Hole> >(
 			"Hole",
-			init<const Uuid&, const Point&, const Length&>
+			init<const Uuid&, const Point&, const Length&>()
 			)
         .add_property("uuid", make_function(&Hole::getUuid, return_value_policy<copy_const_reference>()))
 		;

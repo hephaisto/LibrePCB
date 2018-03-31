@@ -21,14 +21,20 @@ SOURCES += \
     qstring_converters.cpp \
     core.cpp \
     geometry.cpp \
-    library.cpp \
+    symbol.cpp \
+    package.cpp \
+    component.cpp \
+    device.cpp \
     embedding.cpp \
 
 HEADERS += \
     qstring_converters.h \
     core.h \
     geometry.h \
-    library.h \
+    symbol.h \
+    package.h \
+    component.h \
+    device.h \
     embedding.h \
 
 
