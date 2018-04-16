@@ -24,6 +24,8 @@
 namespace librepcb {
 namespace python {
 
+namespace geometry {
+
 using boost::python::class_;
 using boost::python::init;
 using boost::python::no_init;
@@ -34,7 +36,7 @@ using boost::python::self;
 using boost::python::other;
 
 
-void init_geometry()
+void register_python_classes()
 {
 
     // geometry atomics
@@ -151,6 +153,7 @@ void init_geometry()
     DECLARE_SERIALIZABLE_LIST(Text);
 }
 
+} // geometry
 
-}
-}
+} // python
+} // librepcb

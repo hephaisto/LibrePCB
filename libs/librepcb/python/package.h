@@ -3,7 +3,7 @@ namespace python {
 
 namespace pkg {
 
-void init();
+void register_python_classes();
 
 }
 

@@ -51,12 +51,10 @@ BOOST_PYTHON_MODULE(librepcbpy)
     def("initStandalone", initStandalone);
     def("determineWorkspacePath", determineWorkspacePath);
 
-    init_core();
-    init_geometry();
-    sym::init();
-    pkg::init();
-    cmp::init();
-    dev::init();
+    register_python_classes();
+    geometry::register_python_classes();
+    sym::register_python_classes();
+    pkg::register_python_classes();
 }
 
 

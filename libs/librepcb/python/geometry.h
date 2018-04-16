@@ -1,7 +1,10 @@
 namespace librepcb {
 namespace python {
 
-void init_geometry();
+namespace geometry
+{
+void register_python_classes();
+}
 
 }
 }

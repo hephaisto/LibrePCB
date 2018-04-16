@@ -3,7 +3,7 @@ namespace python {
 
 namespace sym {
 
-void init();
+void register_python_classes();
 
 }
 

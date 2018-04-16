@@ -1,6 +1,10 @@
 #include <boost/python.hpp>
 
 #include "../library/cmp/component.h"
+#include "../library/cmp/cmd/cmdcomponentsignaledit.h"
+#include "../library/cmp/cmpsigpindisplaytype.h"
+#include "../common/signalrole.h"
+
 
 #include "serializablelist.h"
 #include "propertywrapper.h"
@@ -20,24 +24,26 @@ using boost::python::return_internal_reference;
 using boost::python::return_value_policy;
 using boost::python::copy_const_reference;
 using boost::python::bases;
+using boost::python::self;
+using boost::python::other;
 
 
 using namespace librepcb::library;
 
-void init()
+void register_python_classes()
 {
     // SignalRole
 
     auto signalRoleClass = class_<SignalRole, shared_ptr<SignalRole> >(
             "SignalRole"
             )
-        .def("passive",   make_function(&SignalRole::passive  , return_value_policy<copy_const_reference>())).staticMethod("passive")
-        .def("power",     make_function(&SignalRole::power    , return_value_policy<copy_const_reference>())).staticMethod("power")
-        .def("input",     make_function(&SignalRole::input    , return_value_policy<copy_const_reference>())).staticMethod("input")
-        .def("output",    make_function(&SignalRole::output   , return_value_policy<copy_const_reference>())).staticMethod("output")
-        .def("inout",     make_function(&SignalRole::inout    , return_value_policy<copy_const_reference>())).staticMethod("inout")
-        .def("opendrain", make_function(&SignalRole::opendrain, return_value_policy<copy_const_reference>())).staticMethod("opendrain")
-        .def(self == other<SignalRole>)
+        .def("passive",   make_function(&SignalRole::passive  , return_value_policy<copy_const_reference>())).staticmethod("passive")
+        .def("power",     make_function(&SignalRole::power    , return_value_policy<copy_const_reference>())).staticmethod("power")
+        .def("input",     make_function(&SignalRole::input    , return_value_policy<copy_const_reference>())).staticmethod("input")
+        .def("output",    make_function(&SignalRole::output   , return_value_policy<copy_const_reference>())).staticmethod("output")
+        .def("inout",     make_function(&SignalRole::inout    , return_value_policy<copy_const_reference>())).staticmethod("inout")
+        .def("opendrain", make_function(&SignalRole::opendrain, return_value_policy<copy_const_reference>())).staticmethod("opendrain")
+        //.def(self == other<SignalRole>) // TODO
         //.def("getAllRoles", &SignalRole::getAllRoles) // TODO
         ;
 
@@ -54,7 +60,6 @@ void init()
     ADD_WRAPPED_BOOL_PROPERTY(componentSignalClass, ComponentSignal, bool, Required, "required");
     ADD_WRAPPED_BOOL_PROPERTY(componentSignalClass, ComponentSignal, bool, Negated, "negated");
     ADD_WRAPPED_BOOL_PROPERTY(componentSignalClass, ComponentSignal, bool, Clock, "clock");
-    ADD_WRAPPED_BOOL_PROPERTY(componentSignalClass, ComponentSignal, bool, NetSignalNameForced, "netSignalNameForced");
 
     DECLARE_SERIALIZABLE_LIST(ComponentSignal);
 
@@ -64,11 +69,12 @@ void init()
     // ComponentPinSignalMapItem
     auto componentPinSignalMapItemClass = class_<ComponentPinSignalMapItem, shared_ptr<ComponentPinSignalMapItem> >(
             "ComponentPinSignalMapItem",
-            init<const Uuid&, const Uuid&, const CmpSigPinDisplayType& displayType>()
+            //init<const Uuid&, const Uuid&, const CmpSigPinDisplayType& displayType>() // TODO
+            no_init
             )
         .add_property("pinUuid", make_function(&ComponentPinSignalMapItem::getPinUuid, return_value_policy<copy_const_reference>()))
         ;
-    ADD_WRAPPED_PROPERTY(componentPinSignalMapItemClass, ComponentPinSignalMapItem, Uuid, SignalUuid, "signalUuid");
+    //ADD_WRAPPED_PROPERTY(componentPinSignalMapItemClass, ComponentPinSignalMapItem, Uuid, SignalUuid, "signalUuid"); // TODO
     DECLARE_SERIALIZABLE_LIST(ComponentPinSignalMapItem);
 
     // ComponentSymbolVariantItem

@@ -25,7 +25,7 @@ using boost::python::bases;
 
 using namespace librepcb::library;
 
-void init()
+void register_python_classes()
 {
     // SymbolPin
     auto symbolPinClass = class_<SymbolPin, shared_ptr<SymbolPin> >(

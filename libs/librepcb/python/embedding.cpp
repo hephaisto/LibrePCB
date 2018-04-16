@@ -20,6 +20,10 @@ using boost::python::str;
 using boost::python::handle;
 using boost::python::extract;
 using boost::python::ptr;
+using boost::python::class_;
+using boost::python::no_init;
+using boost::python::return_internal_reference;
+using boost::python::make_function;
 
 /*ScriptingEnvironment::ScriptingEnvironment():
 mUndoStack(nullptr),
@@ -113,6 +117,16 @@ void initEmbeddingIfNecessary()
         qInfo() << "Initializing python interpreter";
         Py_Initialize();
         embedding_initialized = true;
+
+        class_<ScriptingEnvironment, boost::noncopyable>(
+            "ScriptingEnvironment",
+            no_init
+            )
+        .add_property("symbol", make_function(&ScriptingEnvironment::getSymbol, return_internal_reference<1>()))
+        .add_property("package", make_function(&ScriptingEnvironment::getPackage, return_internal_reference<1>()))
+        .add_property("component", make_function(&ScriptingEnvironment::getComponent, return_internal_reference<1>()))
+        .add_property("device", make_function(&ScriptingEnvironment::getDevice, return_internal_reference<1>()))
+        ;
     }
 }
 
@@ -167,7 +181,7 @@ void ScriptingEnvironment::runScript(const QString &filename)
         main_namespace["lp"] = cppModule;
         
 
-        main_namespace["symbol"] = ptr(mSymbol);
+        main_namespace["env"] = ptr(this);
 
         #ifdef WORKAROUND_DOUBLE_FREE
             std::ifstream in(filename.toStdString());

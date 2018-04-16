@@ -24,7 +24,7 @@ using boost::python::bases;
 
 using namespace librepcb::library;
 
-void init()
+void register_python_classes()
 {
     // DevicePadSignalMapItem
     auto devicePadSignalMapItemClass = class_<DevicePadSignalMapItem, shared_ptr<DevicePadSignalMapItem> >(

@@ -12,7 +12,7 @@ using boost::python::init;
 using boost::python::self;
 using boost::python::other;
 
-void init_core()
+void register_python_classes()
 {
 
     // uuid

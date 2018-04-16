@@ -1,6 +1,8 @@
 #include <boost/python.hpp>
 
 #include "../library/pkg/package.h"
+#include "../library/pkg/cmd/cmdfootprintpadedit.h"
+#include "../library/pkg/cmd/cmdpackagepadedit.h"
 
 #include "serializablelist.h"
 #include "propertywrapper.h"
@@ -25,7 +27,7 @@ using boost::python::enum_;
 
 using namespace librepcb::library;
 
-void init()
+void register_python_classes()
 {
     // BoardSide
     enum_<FootprintPad::BoardSide>("BoardSide")
@@ -35,28 +37,28 @@ void init()
         ;
 
     // PadShape
-    enum_<FooprintPad::PadShape>("PadShape")
-        .value("round", FootprintPad::PadShape::ROUND)
-        .value("rect", FootprintPad::PadShape::RECT)
-        .value("octagon", FootprintPad::PadShape::octagon)
+    enum_<FootprintPad::Shape>("PadShape")
+        .value("round", FootprintPad::Shape::ROUND)
+        .value("rect", FootprintPad::Shape::RECT)
+        .value("octagon", FootprintPad::Shape::OCTAGON)
         ;
 
     // FootprintPad
     auto footprintPadClass = class_<FootprintPad, shared_ptr<FootprintPad> >(
             "FootprintPad",
-            init<const Uuid&, const Point&, const Angle&, Shape, const Length&, const Length&, const Length&, BoardSide>()
+            init<const Uuid&, const Point&, const Angle&, FootprintPad::Shape, const Length&, const Length&, const Length&, FootprintPad::BoardSide>()
             )
         .add_property("uuid", make_function(&FootprintPad::getUuid, return_value_policy<copy_const_reference>()))
         .add_property("packagePadUuid", make_function(&FootprintPad::getPackagePadUuid, return_value_policy<copy_const_reference>()))
         ;
     ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Point, Position, "position");
     ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Angle, Rotation, "rotation");
-    ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Shape, Shape, "shape");
+    //ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, FootprintPad::Shape, Shape, "shape"); // TODO: make wrapper for other signatures
     ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Length, Width, "width");
     ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Length, Height, "height");
     ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Length, DrillDiameter, "drillDiameter");
-    ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, BoardSide, BoardSide, "boardSide");
-    ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, QString, LayerName, "layerName");
+    //ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, FootprintPad::BoardSide, BoardSide, "boardSide"); // TODO: see above
+    //ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, QString, LayerName, "layerName");
 
     DECLARE_SERIALIZABLE_LIST(FootprintPad);
 
@@ -88,7 +90,7 @@ void init()
 
 
     // Package
-    auto packageClass = class_<Package, shared_ptr<Package> >(
+    auto packageClass = class_<Package, shared_ptr<Package>, boost::noncopyable>(
             "Package",
             init<FilePath, bool>()
             )
@@ -96,7 +98,7 @@ void init()
         .def("save", &Package::save)
         ;
     ADD_LIST_PROPERTY(packageClass, Package, PackagePad, Pads, "pads");
-    ADD_LIST_PROPERTY(packageClass, Footprint, Footprint, Footprints, "footprints");
+    ADD_LIST_PROPERTY(packageClass, Package, Footprint, Footprints, "footprints");
 }
 
 }

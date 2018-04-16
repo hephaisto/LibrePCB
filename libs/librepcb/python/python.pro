@@ -23,8 +23,6 @@ SOURCES += \
     geometry.cpp \
     symbol.cpp \
     package.cpp \
-    component.cpp \
-    device.cpp \
     embedding.cpp \
 
 HEADERS += \
@@ -33,8 +31,6 @@ HEADERS += \
     geometry.h \
     symbol.h \
     package.h \
-    component.h \
-    device.h \
     embedding.h \
 
 

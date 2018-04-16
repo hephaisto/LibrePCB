@@ -40,11 +40,11 @@ private:
     void registerInstance();
     static ScriptingEnvironment *currentInstance;
 
+    UndoStack *mUndoStack;
     librepcb::library::Symbol *mSymbol;
     librepcb::library::Package *mPackage;
     librepcb::library::Component *mComponent;
     librepcb::library::Device *mDevice;
-    UndoStack *mUndoStack;
 };
 
 
