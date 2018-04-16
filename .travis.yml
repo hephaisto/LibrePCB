@@ -28,6 +28,10 @@ matrix:
       compiler: clang
       env: BUILD_DOXYGEN=false
 
+addons:
+  apt:
+    pckages: libboost-all-dev python3-dev
+
 install:
   - source ./dev/travis/install.sh # source required because it modifies the environment
 
