@@ -61,7 +61,7 @@ class PackagePad final : public SerializableObject
 
         // Getters
         const Uuid& getUuid() const noexcept {return mUuid;}
-        QString getName() const noexcept {return mName;}
+        const QString& getName() const noexcept {return mName;}
 
         // Setters
         void setName(const QString& name) noexcept;
