@@ -18,3 +18,4 @@ eagleimport.depends = workspace
 libraryeditor.depends = eagleimport python
 projecteditor.depends = eagleimport
 librarymanager.depends = libraryeditor
+python.depends = workspace project library common
