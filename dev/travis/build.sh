@@ -14,6 +14,6 @@ if [ "$CXX" = "clang++" ]; then CXXFLAGS+=" -Qunused-arguments"; fi
 # build librepcb
 mkdir build
 cd build
-qmake ../librepcb.pro -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC" "QMAKE_CFLAGS=$CFLAGS" "QMAKE_CXXFLAGS=$CXXFLAGS"
+qmake ../librepcb.pro -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC" "QMAKE_CFLAGS=$CFLAGS" "QMAKE_CXXFLAGS=$CXXFLAGS" "PYTHON_VERSION=$PYTHON_VERSION_TO_LINK"
 make -j8
 

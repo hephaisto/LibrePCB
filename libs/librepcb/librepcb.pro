@@ -8,14 +8,19 @@ SUBDIRS = \
     eagleimport \
     libraryeditor \
     projecteditor \
-    librarymanager \
-    python \
+    librarymanager
+
 
 library.depends = common
 project.depends = library
 workspace.depends = project
 eagleimport.depends = workspace
-libraryeditor.depends = eagleimport python
+libraryeditor.depends = eagleimport
 projecteditor.depends = eagleimport
 librarymanager.depends = libraryeditor
-python.depends = workspace project library common
+
+!isEmpty(PYTHON_VERSION) {
+    SUBDIRS += python
+    python.depends = workspace project library common
+    libraryeditor.depends = python
+}
