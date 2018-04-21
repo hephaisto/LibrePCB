@@ -200,7 +200,11 @@ void ScriptingEnvironment::runScript(const QString &filename)
         QString traceback(QString::fromStdWString(getPythonTraceback()));
 
         qWarning() << "Error in python script";
+#if(QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
         qWarning().noquote() << traceback;
+#else
+        qWarning() << traceback;
+#endif
 
         QMessageBox msgBox;
         msgBox.setText(tr("Python error"));
