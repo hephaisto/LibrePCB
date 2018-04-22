@@ -56,6 +56,7 @@ LIBS += \
     -llibrepcbcommon \
     -lsexpresso \
     -lboost_python-py3$$PYTHON_VERSION_MINOR \
+    -lpython3.$$PYTHON_VERSION_MINOR \
 
 QMAKE_CXXFLAGS += \
     "$$system(python3.$$PYTHON_VERSION_MINOR-config --cflags)"
