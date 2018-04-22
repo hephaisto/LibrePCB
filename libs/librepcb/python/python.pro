@@ -67,3 +67,6 @@ QMAKE_LFLAGS += \
 
 DEFINES += BOOST_PYTHON_DYNAMIC_LIB
 
+unix {
+    QMAKE_POST_LINK += ln -s liblibrepcbpy.so $$GENERATED_DIR/unix/librepcbpy.so
+}
