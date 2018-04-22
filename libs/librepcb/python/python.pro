@@ -50,18 +50,19 @@ HEADERS += \
 FORMS += \
 
 LIBS += \
-	-llibrepcbworkspace \
-	-llibrepcbproject \
-	-llibrepcblibrary \
-	-llibrepcbcommon \
-	-lsexpresso \
-	-lboost_python-py3$$PYTHON_VERSION_MINOR \
+    -llibrepcbworkspace \
+    -llibrepcbproject \
+    -llibrepcblibrary \
+    -llibrepcbcommon \
+    -lsexpresso \
+    -lboost_python-py3$$PYTHON_VERSION_MINOR \
 
 QMAKE_CXXFLAGS += \
-	"$$system(python3.$$PYTHON_VERSION_MINOR-config --cflags)"
+    "$$system(python3.$$PYTHON_VERSION_MINOR-config --cflags)"
 
 QMAKE_LFLAGS += \
-	"$$system(python3.$$PYTHON_VERSION_MINOR-config --ldflags)" \
-	"-L$$DESTDIR" \
+    "$$system(python3.$$PYTHON_VERSION_MINOR-config --ldflags)" \
+    "-L$$DESTDIR" \
 
 DEFINES += BOOST_PYTHON_DYNAMIC_LIB
+
