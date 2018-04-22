@@ -9,11 +9,15 @@ include(../../../common.pri)
 
 QT += core widgets network sql opengl printsupport
 
+# this is needed for cases with version numbers like 3.5m like available on debian
+#PYTHON_VERSION_MINOR_DIGITONLY = $$find(PYTHON_VERSION_MINOR, "la")
+#message($$PYTHON_VERSION_MINOR_DIGITONLY)
+
 PYTHON_VERSIONS = $$split(PYTHON_VERSION, ".")
 PYTHON_VERSION_MAJOR = $$member(PYTHON_VERSIONS, 0)
 PYTHON_VERSION_MINOR = $$member(PYTHON_VERSIONS, 1)
-!equal(PYTHON_VERSION_MAJOR, "3") {
-    error(Only python 3.x is supported, but major version was $$PYTHON_VERSION_MAJOR)
+!equals(PYTHON_VERSION_MAJOR, "3") {
+    error("Only python 3.x is supported, but major version was $$PYTHON_VERSION_MAJOR")
 }
 message(Linking against python3.$$PYTHON_VERSION_MINOR)
 
