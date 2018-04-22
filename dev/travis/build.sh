@@ -9,7 +9,7 @@ CXXFLAGS="-Werror"
 
 # set special flag for clang (see https://github.com/travis-ci/travis-ci/issues/5383)
 if [ "$CC" = "clang" ]; then CFLAGS+=" -Qunused-arguments"; fi
-if [ "$CXX" = "clang++" ]; then CXXFLAGS+=" -Qunused-arguments"; fi
+if [ "$CXX" = "clang++" ]; then CXXFLAGS+=" -Qunused-arguments -std=c++1z"; fi
 
 # build librepcb
 mkdir build
