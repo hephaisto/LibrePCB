@@ -152,7 +152,7 @@ void addListProperty(const char* name, PythonClass &cls)
     cls.add_property(name, make_function(wrapper, return_value_policy<manage_new_object>()));
 }
 
-#define ADD_LIST_PROPERTY(pythonClass, ContainerType, ItemType, getterFunctionName, propertyName) addListProperty<ItemType, ItemType##ListNameProvider, ContainerType, decltype(pythonClass), (ItemType##List& (ContainerType::*)() noexcept) (&ContainerType::get##getterFunctionName)>(propertyName, pythonClass);
+#define ADD_LIST_PROPERTY(pythonClass, ContainerType, ItemType, getterFunctionName, propertyName) addListProperty<ItemType, ItemType##ListNameProvider, ContainerType, decltype(pythonClass), (&ContainerType::get##getterFunctionName)>(propertyName, pythonClass);
 
 /*
 template<typename ItemType, typename NameProvider, typename ClassWithProperty, typename PythonClass>
