@@ -1,4 +1,4 @@
-#include <boost/python.hpp>
+#include "common.h"
 #include <QString>
 
 #include "../common/uuid.h"

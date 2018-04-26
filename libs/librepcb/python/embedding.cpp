@@ -4,7 +4,7 @@
 #include <fstream>
 #endif
 
-#include <boost/python.hpp>
+#include "common.h"
 #include <QDebug>
 #include <QString>
 

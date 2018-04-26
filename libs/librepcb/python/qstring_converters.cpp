@@ -1,5 +1,5 @@
 // thanks to https://misspent.wordpress.com/2009/09/27/how-to-write-boost-python-converters/
-#include <boost/python.hpp>
+#include "common.h"
 #include <QString>
 #include <Python.h>
 #include <boost/python/def.hpp>

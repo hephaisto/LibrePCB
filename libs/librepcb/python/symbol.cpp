@@ -1,4 +1,4 @@
-#include <boost/python.hpp>
+#include "common.h"
 
 #include "../library/sym/symbol.h"
 #include "../library/sym/cmd/cmdsymbolpinedit.h"

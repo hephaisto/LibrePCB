@@ -1,4 +1,4 @@
-#include <boost/python.hpp>
+#include "common.h"
 
 #include "../library/cmp/component.h"
 #include "../library/cmp/cmd/cmdcomponentsignaledit.h"
