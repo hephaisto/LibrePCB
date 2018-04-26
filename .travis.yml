@@ -18,15 +18,7 @@ matrix:
     - os: linux
       dist: trusty
       compiler: clang
-      env: BUILD_DOXYGEN=false DEPLOY_APPIMAGE=true QT_BASE="qt59" QT_PPA="ppa:beineri/opt-qt591-trusty" PYTHON_VERSION_TO_LINK=3.4
-    # OS X + GCC
-    - os: osx
-      compiler: gcc
-      env: BUILD_DOXYGEN=false
-    # OS X + Clang
-    - os: osx
-      compiler: clang
-      env: BUILD_DOXYGEN=false
+      env: BUILD_DOXYGEN=true DEPLOY_APPIMAGE=false QT_BASE="trusty" PYTHON_VERSION_TO_LINK=3.4
 
 addons:
   apt:
