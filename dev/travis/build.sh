@@ -10,6 +10,8 @@ CXXFLAGS="-Werror"
 # set special flag for clang (see https://github.com/travis-ci/travis-ci/issues/5383)
 if [ "$CC" = "clang" ]; then CFLAGS+=" -Qunused-arguments"; fi
 if [ "$CXX" = "clang++" ]; then CXXFLAGS+=" -Qunused-arguments"; fi
+
+QMAKE_CMDLINE_FLAGS=""
 if [ -z "$PYTHON_VERSION_TO_LINK" ];then QMAKE_CMDLINE_FLAGS="PYTHON_VERSION=$PYTHON_VERSION_TO_LINK"; fi
 
 # build librepcb
