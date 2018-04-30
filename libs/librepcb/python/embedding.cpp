@@ -177,7 +177,7 @@ void ScriptingEnvironment::runScript(const QString &filename)
         object main_module = import("__main__");
         object main_namespace = main_module.attr("__dict__"); // copy!
         //object cpp_module( (handle<>(PyImport_ImportModule("Heinz"))) );
-        object cppModule = import("librepcbpy");
+        object cppModule = import("librepcb");
         main_namespace["lp"] = cppModule;
         
 

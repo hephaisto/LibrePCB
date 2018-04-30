@@ -45,7 +45,7 @@ FilePath determineWorkspacePath()
     return path;
 }
 
-BOOST_PYTHON_MODULE(librepcbpy)
+BOOST_PYTHON_MODULE(librepcb)
 {
     register_qstring_converters();
     def("initStandalone", initStandalone);

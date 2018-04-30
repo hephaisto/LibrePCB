@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = librepcbpy
+TARGET = pylibrepcb
 
 # Set the path for the generated binary
 GENERATED_DIR = ../../../generated
@@ -30,7 +30,7 @@ INCLUDEPATH += \
     ../../
 
 SOURCES += \
-    librepcbpy.cpp \
+    pylibrepcb.cpp \
     qstring_converters.cpp \
     core.cpp \
     geometry.cpp \
@@ -68,5 +68,5 @@ QMAKE_LFLAGS += \
 DEFINES += BOOST_PYTHON_DYNAMIC_LIB
 
 unix {
-    QMAKE_POST_LINK += ln -s liblibrepcbpy.so $$GENERATED_DIR/unix/librepcbpy.so
+    QMAKE_POST_LINK += ln -f -s libpylibrepcb.so $$GENERATED_DIR/unix/librepcb.so
 }

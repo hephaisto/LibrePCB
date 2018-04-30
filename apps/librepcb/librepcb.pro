@@ -50,7 +50,7 @@ LIBS += \
     -llibrepcbcommon \
     -lsexpresso \
     -lquazip -lz \
-    -llibrepcbpy \
+    -lpylibrepcb \
 
 INCLUDEPATH += \
     ../../libs/quazip \
