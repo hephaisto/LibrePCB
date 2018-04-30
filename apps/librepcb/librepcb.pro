@@ -50,7 +50,7 @@ LIBS += \
     -llibrepcbcommon \
     -lsexpresso \
     -lquazip -lz \
-    -lpylibrepcb \
+    -l:libpylibrepcb.a \
     -lboost_python-py3$$PYTHON_VERSION_MINOR \
     -lpython3.$$PYTHON_VERSION_MINOR \
 
