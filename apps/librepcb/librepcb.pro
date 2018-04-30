@@ -51,6 +51,8 @@ LIBS += \
     -lsexpresso \
     -lquazip -lz \
     -lpylibrepcb \
+    -lboost_python-py3$$PYTHON_VERSION_MINOR \
+    -lpython3.$$PYTHON_VERSION_MINOR \
 
 INCLUDEPATH += \
     ../../libs/quazip \
@@ -126,3 +128,13 @@ first.depends = $(first) copydata
 export(first.depends)
 export(copydata.commands)
 QMAKE_EXTRA_TARGETS += first copydata
+
+# python-specific
+unix {
+    QMAKE_CXXFLAGS += \
+        "$$system(python3.$$PYTHON_VERSION_MINOR-config --cflags)"
+
+    QMAKE_LFLAGS += \
+        "$$system(python3.$$PYTHON_VERSION_MINOR-config --ldflags)" \
+        "-L$$DESTDIR" \
+}

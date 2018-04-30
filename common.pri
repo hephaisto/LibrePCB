@@ -58,3 +58,14 @@ QMAKE_CXXFLAGS_DEBUG += -Wextra
 
 # QuaZIP: use as static library
 DEFINES += QUAZIP_STATIC
+
+# split python version into major/minor
+PYTHON_VERSIONS = $$split(PYTHON_VERSION, ".")
+PYTHON_VERSION_MAJOR = $$member(PYTHON_VERSIONS, 0)
+PYTHON_VERSION_MINOR = $$member(PYTHON_VERSIONS, 1)
+!equals(PYTHON_VERSION_MAJOR, "3") {
+    error("Only python 3.x is supported, but major version was $$PYTHON_VERSION_MAJOR")
+}
+message(Linking against python3.$$PYTHON_VERSION_MINOR)
+
+

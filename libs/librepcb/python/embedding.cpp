@@ -13,6 +13,9 @@
 namespace librepcb {
 namespace python {
 
+// forward declaration of initialisation function provided by boost::python
+PyMODINIT_FUNC PyInit_librepcb(void);
+
 using boost::python::object;
 using boost::python::import;
 using boost::python::error_already_set;
@@ -115,7 +118,17 @@ void initEmbeddingIfNecessary()
     if(!embedding_initialized)
     {
         qInfo() << "Initializing python interpreter";
+
+        PyImport_AppendInittab( "librepcb", PyInit_librepcb );
         Py_Initialize();
+
+        qInfo() << "Importing python module";
+
+        object main_module = import("__main__");
+        object main_namespace = main_module.attr("__dict__");
+        object cpp_module( (handle<>(PyImport_ImportModule("librepcb"))) );
+        main_namespace["lp"] = cpp_module;
+
         embedding_initialized = true;
 
         class_<ScriptingEnvironment, boost::noncopyable>(
@@ -176,10 +189,6 @@ void ScriptingEnvironment::runScript(const QString &filename)
 
         object main_module = import("__main__");
         object main_namespace = main_module.attr("__dict__"); // copy!
-        //object cpp_module( (handle<>(PyImport_ImportModule("Heinz"))) );
-        object cppModule = import("librepcb");
-        main_namespace["lp"] = cppModule;
-        
 
         main_namespace["env"] = ptr(this);
 
