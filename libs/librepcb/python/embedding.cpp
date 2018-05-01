@@ -273,6 +273,7 @@ void ScriptingEnvironment::runScript(const QString &filename)
         qWarning() << "UNHANDLED EXCEPTION WHILE EXECUTING PYTHON SCRIPT";
     }
 #else // ! HAS_PYTHON
+    Q_UNUSED(filename);
     QMessageBox msgBox;
     msgBox.setText(tr("Not supported"));
     msgBox.setInformativeText(tr("Python scripting was not enabled during compilation"));
