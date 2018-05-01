@@ -22,11 +22,11 @@ matrix:
     # OS X + GCC
     - os: osx
       compiler: gcc
-      env: BUILD_DOXYGEN=false
+      env: BUILD_DOXYGEN=false PYTHON_VERSION_TO_LINK=""
     # OS X + Clang
     - os: osx
       compiler: clang
-      env: BUILD_DOXYGEN=false
+      env: BUILD_DOXYGEN=false PYTHON_VERSION_TO_LINK=""
 
 addons:
   apt:
