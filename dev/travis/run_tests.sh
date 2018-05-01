@@ -14,3 +14,8 @@ then
   ./build/generated/mac/tests
 fi
 
+# run python library tests
+if [ -z "$PYTHON_VERSION_TO_LINK" ]
+then
+    PYTHONPATH=$PYTHONPATH:./build/generated/unix python3 -m unittest discover -v -s ./tests/python
+fi
