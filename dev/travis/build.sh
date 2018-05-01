@@ -11,9 +11,12 @@ CXXFLAGS="-Werror"
 if [ "$CC" = "clang" ]; then CFLAGS+=" -Qunused-arguments"; fi
 if [ "$CXX" = "clang++" ]; then CXXFLAGS+=" -Qunused-arguments"; fi
 
+QMAKE_CMDLINE_FLAGS=""
+if [ -z "$PYTHON_VERSION_TO_LINK" ];then QMAKE_CMDLINE_FLAGS="PYTHON_VERSION=$PYTHON_VERSION_TO_LINK"; fi
+
 # build librepcb
 mkdir build
 cd build
-qmake ../librepcb.pro -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC" "QMAKE_CFLAGS=$CFLAGS" "QMAKE_CXXFLAGS=$CXXFLAGS" "PYTHON_VERSION=$PYTHON_VERSION_TO_LINK"
+qmake ../librepcb.pro -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC" "QMAKE_CFLAGS=$CFLAGS" "QMAKE_CXXFLAGS=$CXXFLAGS" $QMAKE_CMDLINE_FLAGS
 make -j8
 
