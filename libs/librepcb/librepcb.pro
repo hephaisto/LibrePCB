@@ -23,4 +23,7 @@ librarymanager.depends = libraryeditor
     SUBDIRS += python
     python.depends = workspace project library common
     libraryeditor.depends = python
+} else {
+    SUBDIRS += python
+    python.file = python/stub.pro
 }

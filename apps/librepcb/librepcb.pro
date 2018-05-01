@@ -51,8 +51,14 @@ LIBS += \
     -lsexpresso \
     -lquazip -lz \
     -l:libpylibrepcb.a \
+
+
+!isEmpty(PYTHON_VERSION) {
+    LIBS += \
     -lboost_python-py3$$PYTHON_VERSION_MINOR \
     -lpython3.$$PYTHON_VERSION_MINOR \
+
+}
 
 INCLUDEPATH += \
     ../../libs/quazip \

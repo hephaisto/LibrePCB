@@ -4,7 +4,12 @@
 #include <fstream>
 #endif
 
+#ifdef HAS_PYTHON
+
 #include <boost/python.hpp>
+
+#endif // HAS_PYTHON
+
 #include <QDebug>
 #include <QString>
 
@@ -13,8 +18,8 @@
 namespace librepcb {
 namespace python {
 
-// forward declaration of initialisation function provided by boost::python
-PyMODINIT_FUNC PyInit_librepcb(void);
+
+#ifdef HAS_PYTHON
 
 using boost::python::object;
 using boost::python::import;
@@ -27,6 +32,11 @@ using boost::python::class_;
 using boost::python::no_init;
 using boost::python::return_internal_reference;
 using boost::python::make_function;
+
+// forward declaration of initialisation function provided by boost::python
+PyMODINIT_FUNC PyInit_librepcb(void);
+
+#endif // HAS_PYTHON
 
 /*ScriptingEnvironment::ScriptingEnvironment():
 mUndoStack(nullptr),
@@ -115,6 +125,7 @@ librepcb::library::Device* ScriptingEnvironment::getDevice() const noexcept
 bool embedding_initialized = false;
 void initEmbeddingIfNecessary()
 {
+#ifdef HAS_PYTHON
     if(!embedding_initialized)
     {
         qInfo() << "Initializing python interpreter";
@@ -141,8 +152,10 @@ void initEmbeddingIfNecessary()
         .add_property("device", make_function(&ScriptingEnvironment::getDevice, return_internal_reference<1>()))
         ;
     }
+#endif // HAS_PYTHON
 }
 
+#ifdef HAS_PYTHON
 std::wstring getPythonTraceback()
 {
     // from https://wiki.python.org/moin/boost.python/EmbeddingPython
@@ -177,9 +190,11 @@ std::wstring getPythonTraceback()
     Py_XDECREF(pTraceback);
     return result;
 }
+#endif // HAS_PYTHON
 
 void ScriptingEnvironment::runScript(const QString &filename)
 {
+#ifdef HAS_PYTHON
     try
     {
         qInfo() << "running script " << filename;
@@ -257,6 +272,13 @@ void ScriptingEnvironment::runScript(const QString &filename)
     {
         qWarning() << "UNHANDLED EXCEPTION WHILE EXECUTING PYTHON SCRIPT";
     }
+#else // ! HAS_PYTHON
+    QMessageBox msgBox;
+    msgBox.setText(tr("Not supported"));
+    msgBox.setInformativeText(tr("Python scripting was not enabled during compilation"));
+    msgBox.setIcon(QMessageBox::Critical);
+    msgBox.exec();
+#endif // HAS_PYTHON
 }
 
 
