@@ -18,7 +18,7 @@ fi
 if [ -z "${PYTHON_VERSION_TO_LINK}" ]
 then
     # use empty default PYTHONPATH
-    if ! [ -z ${PYTHONPATH+x} ]
+    if [ -z ${PYTHONPATH+x} ]
     then
         PYTHONPATH=""
     fi
