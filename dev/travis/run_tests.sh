@@ -15,7 +15,10 @@ then
 fi
 
 # run python library tests
-if [ -z "$PYTHON_VERSION_TO_LINK" ]
+if [ -z "${PYTHON_VERSION_TO_LINK}" ]
 then
+    # use empty default PYTHONPATH
+    [ -z "${PYTHONPATH}" ] || PYTHONPATH=""
+
     PYTHONPATH=$PYTHONPATH:./build/generated/unix python3 -m unittest discover -v -s ./tests/python
 fi
