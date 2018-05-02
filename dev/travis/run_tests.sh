@@ -18,7 +18,10 @@ fi
 if [ -z "${PYTHON_VERSION_TO_LINK}" ]
 then
     # use empty default PYTHONPATH
-    [ -z "${PYTHONPATH}" ] || PYTHONPATH=""
+    if ! [ -z ${PYTHONPATH+x} ]
+    then
+        PYTHONPATH=""
+    fi
 
     PYTHONPATH=$PYTHONPATH:./build/generated/unix python3 -m unittest discover -v -s ./tests/python
 fi
