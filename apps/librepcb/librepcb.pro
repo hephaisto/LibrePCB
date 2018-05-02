@@ -50,7 +50,7 @@ LIBS += \
     -llibrepcbcommon \
     -lsexpresso \
     -lquazip -lz \
-    -l:libpylibrepcb.a \
+    -Wl,-Bstatic -lpylibrepcb -Wl,-Bdynamic
 
 
 !isEmpty(PYTHON_VERSION) {
