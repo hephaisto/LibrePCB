@@ -51,7 +51,7 @@ LIBS += \
     -lsexpresso \
     -lquazip -lz \
 
-unix {
+linux {
     LIBS += -Wl,-Bstatic -lpylibrepcb -Wl,-Bdynamic
 } macx {
     LIBS += -Wl,$$GENERATED_DIR/pylibrepcb.a
