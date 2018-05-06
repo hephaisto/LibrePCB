@@ -8,7 +8,9 @@ def getWorkspaceLocation():
     try:
         wp = os.environ["TEST_WORKSPACE_LOCATION"]
         print("getting workspace from TEST_WORKSPACE_LOCATION: \"{}\"".format(wp))
-        return lp.FilePath(wp)
+        p = lp.FilePath(wp)
+        print("resulting file path: \"{}\"".format(p.toStr()))
+        return p
     except KeyError:
         print("TEST_WORKSPACE_LOCATION not defined")
         wp = lp.determineWorkspacePath()
