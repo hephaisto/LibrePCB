@@ -7,3 +7,5 @@ def getWorkspaceLocation():
         return lp.FilePath(wp)
     except KeyError:
         return lp.determineWorkspacePath()
+
+print("using workspace location: \"{}\"".format(str(getWorkspaceLocation())))
