@@ -8,4 +8,4 @@ def getWorkspaceLocation():
     except KeyError:
         return lp.determineWorkspacePath()
 
-print("using workspace location: \"{}\"".format(str(getWorkspaceLocation())))
+print("using workspace location: \"{}\"".format(getWorkspaceLocation().toStr()))
