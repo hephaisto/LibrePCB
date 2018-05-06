@@ -12,7 +12,7 @@ if [ "$CC" = "clang" ]; then CFLAGS+=" -Qunused-arguments"; fi
 if [ "$CXX" = "clang++" ]; then CXXFLAGS+=" -Qunused-arguments"; fi
 
 QMAKE_CMDLINE_FLAGS=""
-if [ -z "$PYTHON_VERSION_TO_LINK" ];then QMAKE_CMDLINE_FLAGS="PYTHON_VERSION=$PYTHON_VERSION_TO_LINK"; fi
+if ! [ -z "$PYTHON_VERSION_TO_LINK" ];then QMAKE_CMDLINE_FLAGS="PYTHON_VERSION=$PYTHON_VERSION_TO_LINK"; fi
 
 # build librepcb
 mkdir build

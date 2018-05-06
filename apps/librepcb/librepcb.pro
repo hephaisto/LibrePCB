@@ -50,8 +50,12 @@ LIBS += \
     -llibrepcbcommon \
     -lsexpresso \
     -lquazip -lz \
-    -l:libpylibrepcb.a \
 
+linux {
+    LIBS += -Wl,-Bstatic -lpylibrepcb -Wl,-Bdynamic
+} macx {
+    LIBS += -Wl,$$GENERATED_DIR/mac/libpylibrepcb.a
+}
 
 !isEmpty(PYTHON_VERSION) {
     LIBS += \
