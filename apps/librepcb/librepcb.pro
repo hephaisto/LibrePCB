@@ -54,7 +54,7 @@ LIBS += \
 linux {
     LIBS += -Wl,-Bstatic -lpylibrepcb -Wl,-Bdynamic
 } macx {
-    LIBS += -Wl,$$GENERATED_DIR/pylibrepcb.a
+    LIBS += -Wl,$$GENERATED_DIR/mac/pylibrepcb.a
 }
 
 !isEmpty(PYTHON_VERSION) {
