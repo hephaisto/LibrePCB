@@ -1,9 +1,13 @@
 import os
 import librepcb as lp
 
+for k, v in os.environ.items():
+    print("{}={}".format(k, v))
+
 def getWorkspaceLocation():
     try:
         wp = os.environ["TEST_WORKSPACE_LOCATION"]
+        print("getting workspace from TEST_WORKSPACE_LOCATION: \"{}\"".format(wp))
         return lp.FilePath(wp)
     except KeyError:
         print("TEST_WORKSPACE_LOCATION not defined")
