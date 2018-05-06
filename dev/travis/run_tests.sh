@@ -14,3 +14,16 @@ then
   ./build/generated/mac/tests
 fi
 
+# run python library tests
+if ! [ -z "${PYTHON_VERSION_TO_LINK}" ]
+then
+    # use empty default PYTHONPATH
+    if [ -z ${PYTHONPATH+x} ]
+    then
+        PYTHONPATH=""
+    fi
+    
+    PYTHONPATH=$PYTHONPATH:./build/generated/unix TEST_WORKSPACE_LOCATION=`pwd`/dev/demo-workspace python3 -m unittest discover -v -s ./tests/python
+else
+    echo "Skipping python test (python not activated)"
+fi
