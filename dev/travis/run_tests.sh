@@ -22,8 +22,8 @@ then
     then
         PYTHONPATH=""
     fi
-
-    PYTHONPATH=$PYTHONPATH:./build/generated/unix python3 -m unittest discover -v -s ./tests/python
+    
+    PYTHONPATH=$PYTHONPATH:./build/generated/unix TEST_WORKSPACE_LOCATION=./dev/demo-workspace python3 -m unittest discover -v -s ./tests/python
 else
     echo "Skipping python test (python not activated)"
 fi
