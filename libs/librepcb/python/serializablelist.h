@@ -30,9 +30,10 @@ public:
 
     void append(const shared_ptr<ItemType> &item)
     {
-        UndoStack* undoStack = ScriptingEnvironment::instance()->getUndoStack();
-        if(undoStack)
+
+        if(ScriptingEnvironment::instance())
         {
+            UndoStack* undoStack = ScriptingEnvironment::instance()->getUndoStack();
             undoStack->appendToCmdGroup(new CmdListElementInsert<ItemType, NameProvider>(mList, item));
         }
         else
@@ -40,12 +41,13 @@ public:
             mList.append(item);
         }
     }
-
     void remove(const ItemType *element)
     {
-        UndoStack* undoStack = ScriptingEnvironment::instance()->getUndoStack();
-        if(undoStack)
+        if( !mList.contains(element) )
+            throw std::out_of_range("SerializableObjectList invalid key");
+        if(ScriptingEnvironment::instance())
         {
+            UndoStack* undoStack = ScriptingEnvironment::instance()->getUndoStack();
             undoStack->appendToCmdGroup(new CmdListElementRemove<ItemType, NameProvider>(mList, element));
         }
         else
@@ -68,15 +70,21 @@ public:
         return mList.get(uuid);
     }
 
+    std::shared_ptr<ItemType> getByName(const QString& name)
+    {
+        return mList.get(name);
+    }
+
 private:
     TList &mList;
 };
+
+
 //
 // ADD NAME GETTER IF POSSIBLE
 // This adds __getitem__(QString) to the SerializableObjectList<T>, if T::getName() exists
 //
 
-/*
 template<class ItemType> struct hasNameGetter
 {
     template<typename C> static constexpr decltype(std::declval<C>().getName(), bool()) test(int)
@@ -92,23 +100,23 @@ template<class ItemType> struct hasNameGetter
     static constexpr bool value = test<ItemType>(int());
 };
 
+
+
 // adds string-based indexing
 template<typename ItemType, typename NameProvider, typename PythonClassPlaceholder> typename std::enable_if<hasNameGetter<ItemType>::value, void>::type addNameGetter(PythonClassPlaceholder &cls)
 {
     using TList = ListWrapper<ItemType, NameProvider>;
-    shared_ptr<ItemType> (TList::*GetterString)(const QString&) = &TList::get;
-    void (TList::*RemoverString)(const QString&) = &TList::remove;
+    shared_ptr<ItemType> (TList::*GetterString)(const QString&) = &TList::getByName;
     cls
         .def("__getitem__", GetterString)
-        .def("remove", RemoverString)
     ;
 }
 
 // stub if no string-based indexing
 template<typename ItemType, typename NameProvider, typename PythonClassPlaceholder> typename std::enable_if<!hasNameGetter<ItemType>::value, void>::type addNameGetter(PythonClassPlaceholder &cls)
 {
+    Q_UNUSED(cls);
 }
-*/
 
 //
 // ADD COMMON FUNCTIONS
@@ -128,13 +136,13 @@ template<typename T, typename NameProvider>
             .def("__getitem__", &TList::getByIndex)
             .def("__getitem__", &TList::getByUuid)
 
-            //.def("remove", RemoverInt)
-            //.def("remove", RemoverUuid)
+            .def("remove", &TList::remove)
 
             .def("append", &TList::append)
         ;
-        //addNameGetter<T, NameProvider, decltype(cls)>(cls);
+        addNameGetter<T, NameProvider, decltype(cls)>(cls);
     }
+
 
 #define DECLARE_SERIALIZABLE_LIST(name) declList<name, name##ListNameProvider>(#name "List")
 
@@ -154,16 +162,7 @@ void addListProperty(const char* name, PythonClass &cls)
 
 #define ADD_LIST_PROPERTY(pythonClass, ContainerType, ItemType, getterFunctionName, propertyName) addListProperty<ItemType, ItemType##ListNameProvider, ContainerType, decltype(pythonClass), (&ContainerType::get##getterFunctionName)>(propertyName, pythonClass);
 
-/*
-template<typename ItemType, typename NameProvider, typename ClassWithProperty, typename PythonClass>
-void addListProperty(const char* name, PythonClass &cls, SerializableObjectList<ItemType, NameProvider>& (ClassWithProperty::*f)(void) )
-{
-    auto wrapper = [f](ClassWithProperty *instance) -> ListWrapper<ItemType, NameProvider>*
-    {
-        return new ListWrapper<ItemType, NameProvider>((instance->*f)());
-    };
-    cls.add_property(name, wrapper, return_value_policy<manage_new_object>());
-}*/
+
 
 }
 }

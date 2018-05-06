@@ -24,14 +24,25 @@ class TestSymbol(unittest.TestCase):
 
         self.assertEqual(p[pin_index].name, pin_name)
         self.assertEqual(p[pin_index].uuid, pin_uuid)
-        #self.assertEqual(p[pin_uuid].name, pin_name)
-        #self.assertEqual(p[pin_name].uuid, pin_uuid)
+        self.assertEqual(p[pin_uuid].name, pin_name)
+        self.assertEqual(p[pin_name].uuid, pin_uuid)
 
         # invalid keys
-        #with self.assertRaises(RuntimeError):
-        #    p["BLA"]
-        #with self.assertRaises(RuntimeError):
-        #    p[lp.Uuid("11d0b59a-11b0-4168-ac68-189c24c14f81")]
+        with self.assertRaises(RuntimeError):
+            p["BLA"]
+        with self.assertRaises(RuntimeError):
+            p[lp.Uuid("11d0b59a-11b0-4168-ac68-189c24c14f81")]
+
+    def test_pin_list(self):
+        p = self.symbol.pins
+        len_start = len(p)
+        pin = p[len_start-1]
+        p.remove(pin)
+        len_removed = len(p)
+        self.assertEqual(len_removed, len_start-1)
+        p.append(pin)
+        self.assertEqual(len(p), len_start)
+
 
     def test_polygon(self):
         p = self.symbol.polygons
