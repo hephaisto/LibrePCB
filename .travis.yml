@@ -13,7 +13,7 @@ matrix:
     - os: linux
       dist: trusty
       compiler: gcc
-      env: BUILD_DOXYGEN=true DEPLOY_APPIMAGE=false QT_BASE="trusty" PYTHON_VERSION_TO_LINK=3.4
+      env: BUILD_DOXYGEN=true DEPLOY_APPIMAGE=false QT_BASE="trusty" PYTHON_VERSION_TO_LINK=3.4 TEST_WORKSPACE_LOCATION=./dev/demo-workspace
     # Ubuntu 14.04 + Clang + Qt from PPA (https://launchpad.net/~beineri) + AppImage deployment
     - os: linux
       dist: trusty

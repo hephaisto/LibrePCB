@@ -1,9 +1,10 @@
 import unittest
 import librepcb as lp
+from common import getWorkspaceLocation
 
 class TestSymbol(unittest.TestCase):
     def setUp(self):
-        wp = lp.determineWorkspacePath()
+        wp = getWorkspaceLocation()
         symbol_uuid = "cb9e1ec9-e935-40e0-863e-7946730e8325" 
         self.symbol = lp.Symbol(wp.getPathTo("v0.1/libraries/local/LibrePCB_Base.lplib/sym/{}/".format(symbol_uuid)), True)
 
