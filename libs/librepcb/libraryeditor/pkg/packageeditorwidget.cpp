@@ -32,6 +32,7 @@
 #include <librepcb/workspace/settings/workspacesettings.h>
 #include <librepcb/common/dialogs/gridsettingsdialog.h>
 #include "fsm/packageeditorfsm.h"
+#include "../../python/embedding.h"
 
 /*****************************************************************************************
  *  Namespace
@@ -312,6 +313,14 @@ bool PackageEditorWidget::isInterfaceBroken() const noexcept
         if (current->getPads().getUuidSet() != original.getPads().getUuidSet()) return true;
     }
     return false;
+}
+
+bool PackageEditorWidget::runPythonScript() noexcept
+{
+    librepcb::python::ScriptingEnvironment py(mUndoStack.data());
+    py.setPackage(mPackage.data());
+    py.runScript("embedding.py");
+    return true;
 }
 
 /*****************************************************************************************

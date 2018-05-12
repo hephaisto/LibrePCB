@@ -95,6 +95,7 @@ class PackageEditorWidget final : public EditorWidgetBase, public IF_GraphicsVie
         bool zoomOut() noexcept override;
         bool zoomAll() noexcept override;
         bool abortCommand() noexcept override;
+        virtual bool runPythonScript() noexcept override;
         bool editGridProperties() noexcept override;
 
 
