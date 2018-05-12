@@ -192,7 +192,7 @@ std::wstring getPythonTraceback()
 }
 #endif // HAS_PYTHON
 
-void ScriptingEnvironment::runScript(const QString &filename)
+QString ScriptingEnvironment::runScript(const QString &filename)
 {
 #ifdef HAS_PYTHON
     try
@@ -207,6 +207,14 @@ void ScriptingEnvironment::runScript(const QString &filename)
 
         main_namespace["env"] = ptr(this);
 
+        // get stdout/stderr
+        exec(str(
+            "import sys, io\n"
+            "_stdStreamCatcher = io.StringIO()\n"
+            "sys.stdout = _stdStreamCatcher\n"
+            "sys.stderr = _stdStreamCatcher\n"
+            ), main_namespace);
+
         #ifdef WORKAROUND_DOUBLE_FREE
             std::ifstream in(filename.toStdString());
             std::string buf( (std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()) );
@@ -215,8 +223,18 @@ void ScriptingEnvironment::runScript(const QString &filename)
             exec_file(str(filename.toStdWString()), main_namespace);
         #endif
 
+        QString output = extract<QString>(eval(str("_stdStreamCatcher.getvalue()"), main_namespace));
+        exec(str("_stdStreamCatcher.close()"), main_namespace);
+
+#if(QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
+        qInfo().noquote() << output;
+#else
+        qInfo() << output;
+#endif
+
         qInfo() << "script " << filename << " exited normally";
         mUndoStack->commitCmdGroup();
+        return output;
     }
     catch(error_already_set const &)
     {
@@ -280,6 +298,7 @@ void ScriptingEnvironment::runScript(const QString &filename)
     msgBox.setIcon(QMessageBox::Critical);
     msgBox.exec();
 #endif // HAS_PYTHON
+    return "";
 }
 
 
