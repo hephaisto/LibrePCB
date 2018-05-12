@@ -57,6 +57,7 @@ void register_python_classes()
     ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Length, Width, "width");
     ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Length, Height, "height");
     ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Length, DrillDiameter, "drillDiameter");
+    ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, Uuid, PackagePadUuid, "packagePadUuid");
     //ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, FootprintPad::BoardSide, BoardSide, "boardSide"); // TODO: see above
     //ADD_WRAPPED_PROPERTY(footprintPadClass, FootprintPad, QString, LayerName, "layerName");
 
