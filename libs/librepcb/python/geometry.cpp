@@ -34,7 +34,53 @@ using boost::python::return_value_policy;
 using boost::python::copy_const_reference;
 using boost::python::self;
 using boost::python::other;
+using boost::python::def;
 
+Alignment makeAlign(std::string tag)
+{
+    if( tag.length() != 2 )
+    {
+        throw std::runtime_error("tag has to be of length 2");
+    }
+
+    HAlign h;
+    if( tag[0] == 'l' )
+    {
+        h = HAlign::left();
+    }
+    else if( tag[0] == 'c' )
+    {
+        h = HAlign::center();
+    }
+    else if( tag[0] == 'r' )
+    {
+        h = HAlign::right();
+    }
+    else
+    {
+        throw std::runtime_error("unknown horizontal align flag");
+    }
+
+    VAlign v;
+    if( tag[1] == 't' )
+    {
+        v = VAlign::top();
+    }
+    else if( tag[1] == 'c' )
+    {
+        v = VAlign::center();
+    }
+    else if( tag[1] == 'b' )
+    {
+        v = VAlign::bottom();
+    }
+    else
+    {
+        throw std::runtime_error("unknown vertical align flag");
+    }
+
+    return Alignment(h, v);
+}
 
 void register_python_classes()
 {
@@ -124,10 +170,18 @@ void register_python_classes()
     ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, Length, RadiusY, "ry");
     ADD_WRAPPED_PROPERTY(ellipseClass, Ellipse, Angle, Rotation, "rotation");
 
+    // alignment
+    auto alignmentClass = class_<Alignment, shared_ptr<Alignment> >(
+        "Alignment",
+        init<const HAlign&, const VAlign&>()
+        )
+        ;
+    def("makeAlign", makeAlign, "Pass a two-character string, the first character indicating horizontal alignment (lcr), the second vertical alignment (tcb)");
+
     // text
     auto textClass = class_<Text, shared_ptr<Text> >(
             "Text",
-            no_init
+            init<const Uuid&, const QString&, const QString&, const Point&, const Angle&, const Length&, const Alignment&>()
             )
         .add_property("uuid", make_function(&Text::getUuid, return_value_policy<copy_const_reference>()))
         ;
@@ -136,8 +190,9 @@ void register_python_classes()
     ADD_WRAPPED_PROPERTY(textClass, Text, Angle, Rotation, "rotation");
     ADD_WRAPPED_PROPERTY(textClass, Text, Length, Height, "height");
     ADD_WRAPPED_PROPERTY(textClass, Text, QString, Text, "text");
+    addWrappedProperty<decltype(textClass), Text, Alignment, CmdTextEdit, &Text::getAlign, &Text::setAlign, &CmdTextEdit::setAlignment>("align", textClass); // classes sometimes use Align and sometimes use Alignment
 
-
+    // hole
 	auto holeClass = class_<Hole, shared_ptr<Hole> >(
 			"Hole",
 			init<const Uuid&, const Point&, const Length&>()
