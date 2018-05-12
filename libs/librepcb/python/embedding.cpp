@@ -32,6 +32,7 @@ using boost::python::class_;
 using boost::python::no_init;
 using boost::python::return_internal_reference;
 using boost::python::make_function;
+using boost::python::list;
 
 // forward declaration of initialisation function provided by boost::python
 PyMODINIT_FUNC PyInit_librepcb(void);
@@ -192,15 +193,16 @@ std::wstring getPythonTraceback()
 }
 #endif // HAS_PYTHON
 
-QString ScriptingEnvironment::runScript(const QString &filename)
+QString ScriptingEnvironment::runScript(const QString &command)
 {
+    QString filename{""};
 #ifdef HAS_PYTHON
     try
     {
-        qInfo() << "running script " << filename;
+        qInfo() << "running script " << command;
         initEmbeddingIfNecessary();
 
-        mUndoStack->beginCmdGroup(tr("execute script %1").arg(filename));
+        mUndoStack->beginCmdGroup(tr("execute script %1").arg(command));
 
         object main_module = import("__main__");
         object main_namespace = main_module.attr("__dict__"); // copy!
@@ -214,6 +216,13 @@ QString ScriptingEnvironment::runScript(const QString &filename)
             "sys.stdout = _stdStreamCatcher\n"
             "sys.stderr = _stdStreamCatcher\n"
             ), main_namespace);
+
+        // parse command-line arguments
+        object shlex = import("shlex");
+        list argv = extract<list>(shlex.attr("split")(command));
+        main_namespace["sys"].attr("argv") = argv;
+        filename = extract<QString>(argv[0]);
+
 
         #ifdef WORKAROUND_DOUBLE_FREE
             std::ifstream in(filename.toStdString());
@@ -291,7 +300,7 @@ QString ScriptingEnvironment::runScript(const QString &filename)
         qWarning() << "UNHANDLED EXCEPTION WHILE EXECUTING PYTHON SCRIPT";
     }
 #else // ! HAS_PYTHON
-    Q_UNUSED(filename);
+    Q_UNUSED(command);
     QMessageBox msgBox;
     msgBox.setText(tr("Not supported"));
     msgBox.setInformativeText(tr("Python scripting was not enabled during compilation"));

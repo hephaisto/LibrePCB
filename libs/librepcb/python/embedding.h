@@ -31,7 +31,7 @@ public:
     void setDevice(librepcb::library::Device *device);
 
     // run script
-    QString runScript(const QString &filename);
+    QString runScript(const QString &command);
 
     // singleton instance
     static ScriptingEnvironment* instance();
