@@ -209,6 +209,8 @@
    </attribute>
    <addaction name="actionAbortCommand"/>
    <addaction name="separator"/>
+  </widget>
+  <widget class="QToolBar" name="scriptingToolbar">
    <addaction name="actionRunPythonScript"/>
   </widget>
   <widget class="QToolBar" name="toolsToolbar">
