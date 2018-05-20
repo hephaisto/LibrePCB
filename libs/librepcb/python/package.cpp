@@ -91,7 +91,7 @@ void register_python_classes()
 
 
     // Package
-    auto packageClass = class_<Package, shared_ptr<Package>, boost::noncopyable>(
+    auto packageClass = class_<Package, bases<LibraryBaseElement>, shared_ptr<Package>, boost::noncopyable>(
             "Package",
             init<FilePath, bool>()
             )
