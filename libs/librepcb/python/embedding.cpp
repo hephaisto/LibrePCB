@@ -13,6 +13,8 @@
 #include <QDebug>
 #include <QString>
 
+#include "../workspace/workspace.h"
+
 #include "embedding.h"
 
 namespace librepcb {
@@ -46,8 +48,8 @@ mSymbol(nullptr)
     registerInstance();
 }*/
 
-ScriptingEnvironment::ScriptingEnvironment(UndoStack *undoStack):
-mUndoStack(undoStack),
+ScriptingEnvironment::ScriptingEnvironment():
+mUndoStack(nullptr),
 mSymbol(nullptr),
 mPackage(nullptr),
 mComponent(nullptr),
@@ -71,6 +73,10 @@ ScriptingEnvironment* ScriptingEnvironment::instance()
     return currentInstance;
 }
 
+void ScriptingEnvironment::setUndoStack(UndoStack *stack)
+{
+    mUndoStack = stack;
+}
 UndoStack* ScriptingEnvironment::getUndoStack() const noexcept
 {
     return mUndoStack;
@@ -223,13 +229,24 @@ QString ScriptingEnvironment::runScript(const QString &command)
         main_namespace["sys"].attr("argv") = argv;
         filename = extract<QString>(argv[0]);
 
+        // find script file and set the module include search path
+        FilePath pythonDir(librepcb::workspace::Workspace::getMostRecentlyUsedWorkspacePath().getPathTo("python_scripts"));
+        if(!pythonDir.isExistingDir())
+            throw librepcb::RuntimeError(__FILE__, __LINE__, pythonDir.toStr() + " does not exist");
+
+        FilePath scriptPath(pythonDir.getPathTo(filename));
+        if(!scriptPath.isExistingFile())
+            throw librepcb::RuntimeError(__FILE__, __LINE__, scriptPath.toStr() + " does not exist");
+        list moduleSearchPath = extract<list>(main_namespace["sys"].attr("path"));
+        moduleSearchPath.append(pythonDir);
+
 
         #ifdef WORKAROUND_DOUBLE_FREE
-            std::ifstream in(filename.toStdString());
+            std::ifstream in(scriptPath.toStr().toStdString());
             std::string buf( (std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()) );
             exec(str(buf), main_namespace);
         #else
-            exec_file(str(filename.toStdWString()), main_namespace);
+            exec_file(str(scriptPath.toStr().toStdWString()), main_namespace);
         #endif
 
         QString output = extract<QString>(eval(str("_stdStreamCatcher.getvalue()"), main_namespace));
@@ -247,7 +264,6 @@ QString ScriptingEnvironment::runScript(const QString &command)
     }
     catch(error_already_set const &)
     {
-        mUndoStack->abortCmdGroup();
         QString traceback(QString::fromStdWString(getPythonTraceback()));
 
         qWarning() << "Error in python script";
@@ -263,41 +279,22 @@ QString ScriptingEnvironment::runScript(const QString &command)
         msgBox.setDetailedText(traceback);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.exec();
-
-
-        /*try
-        {
-            PyObject* ptype;
-            PyObject* pvalue;
-            PyObject* ptraceback;
-
-            PyErr_Fetch(&ptype, &pvalue, &ptraceback);
-
-            handle<> hType(ptype);
-            object extype(hType);
-            handle<> hTraceback(ptraceback);
-            object traceback(hTraceback);
-
-            std::wstring strErrorMessage = extract<std::wstring>(pvalue);
-            qWarning() << "Exception in python script: " << QString::fromStdWString(strErrorMessage);
-
-            long lineno = extract<long> (traceback.attr("tb_lineno"));
-            std::wstring filename = extract<std::wstring>(traceback.attr("tb_frame").attr("f_code").attr("co_filename"));
-            std::wstring funcname = extract<std::wstring>(traceback.attr("tb_frame").attr("f_code").attr("co_name"));
-            Py_XDECREF(ptype);
-            Py_XDECREF(pvalue);
-            Py_XDECREF(ptraceback);
-            qWarning() << "in " << QString::fromStdWString(funcname) << "(" << QString::fromStdWString(filename) << ": l." <<lineno << ")";
-
-        }
-        catch(error_already_set const &)
-        {
-            qWarning() << "Error while handling exception in python script";
-        }*/
+    }
+    catch(RuntimeError const &e)
+    {
+        QMessageBox msgBox;
+        msgBox.setText(tr("Scripting error"));
+        msgBox.setInformativeText(e.getMsg());
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
     }
     catch(...)
     {
         qWarning() << "UNHANDLED EXCEPTION WHILE EXECUTING PYTHON SCRIPT";
+    }
+    if(mUndoStack->isCommandGroupActive())
+    {
+        mUndoStack->abortCmdGroup();
     }
 #else // ! HAS_PYTHON
     Q_UNUSED(command);

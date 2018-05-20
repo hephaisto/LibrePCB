@@ -12,9 +12,8 @@ class ScriptingEnvironment
 {
     Q_DECLARE_TR_FUNCTIONS(ScriptingEnvironment)
 public:
-    ScriptingEnvironment() = delete;
+    ScriptingEnvironment();
     ScriptingEnvironment(ScriptingEnvironment &other) = delete;
-    explicit ScriptingEnvironment(UndoStack *undoStack = nullptr);
     virtual ~ScriptingEnvironment() noexcept;
 
     // getters
@@ -25,6 +24,7 @@ public:
     librepcb::library::Device* getDevice() const noexcept;
 
     // setters
+    void setUndoStack(UndoStack *stack);
     void setSymbol(librepcb::library::Symbol *symbol);
     void setPackage(librepcb::library::Package *package);
     void setComponent(librepcb::library::Component *component);

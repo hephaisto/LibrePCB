@@ -289,13 +289,10 @@ bool SymbolEditorWidget::isInterfaceBroken() const noexcept
 {
     return mSymbol->getPins().getUuidSet() != mOriginalSymbolPinUuids;
 }
-
-bool SymbolEditorWidget::runPythonScript() noexcept
+void SymbolEditorWidget::populateScriptingEnvironment(librepcb::python::ScriptingEnvironment &env)
 {
-    librepcb::python::ScriptingEnvironment py(mUndoStack.data());
-    py.setSymbol(mSymbol.data());
-    py.runScript("embedding.py");
-    return true;
+    EditorWidgetBase::populateScriptingEnvironment(env);
+    env.setSymbol(mSymbol.data());
 }
 /*****************************************************************************************
  *  End of File

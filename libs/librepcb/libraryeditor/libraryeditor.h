@@ -133,7 +133,6 @@ class LibraryEditor final : public QMainWindow, public IF_GraphicsLayerProvider
         void rotateCcwTriggered() noexcept;
         void removeTriggered() noexcept;
         void abortCommandTriggered() noexcept;
-        void runPythonScriptTriggered() noexcept;
         void zoomInTriggered() noexcept;
         void zoomOutTriggered() noexcept;
         void zoomAllTriggered() noexcept;
@@ -149,6 +148,7 @@ class LibraryEditor final : public QMainWindow, public IF_GraphicsLayerProvider
         void currentTabChanged(int index) noexcept;
         bool tabCloseRequested(int index) noexcept;
         void cursorPositionChanged(const Point& pos) noexcept;
+        void runPythonTriggered() noexcept;
 
 
     private: // Methods
@@ -168,6 +168,8 @@ class LibraryEditor final : public QMainWindow, public IF_GraphicsLayerProvider
         QList<GraphicsLayer*> mLayers;
         EditorWidgetBase* mCurrentEditorWidget;
         DirectoryLock mLock;
+        QLineEdit* mPythonCommandLine;
+        QAction* mPythonAction;
 };
 
 /*****************************************************************************************

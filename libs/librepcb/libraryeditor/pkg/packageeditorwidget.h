@@ -85,7 +85,10 @@ class PackageEditorWidget final : public EditorWidgetBase, public IF_GraphicsVie
         // Operator Overloadings
         PackageEditorWidget& operator=(const PackageEditorWidget& rhs) = delete;
 
+        // Python
+        virtual void populateScriptingEnvironment(librepcb::python::ScriptingEnvironment &env) override;
 
+        
     public slots:
         bool save() noexcept override;
         bool rotateCw() noexcept override;
@@ -95,7 +98,6 @@ class PackageEditorWidget final : public EditorWidgetBase, public IF_GraphicsVie
         bool zoomOut() noexcept override;
         bool zoomAll() noexcept override;
         bool abortCommand() noexcept override;
-        virtual bool runPythonScript() noexcept override;
         bool editGridProperties() noexcept override;
 
 

@@ -44,6 +44,10 @@ namespace workspace {
 class Workspace;
 }
 
+namespace python {
+class ScriptingEnvironment;
+}
+
 namespace library {
 
 class LibraryBaseElement;
@@ -110,6 +114,9 @@ class EditorWidgetBase : public QWidget
         // Operator Overloadings
         EditorWidgetBase& operator=(const EditorWidgetBase& rhs) = delete;
 
+        // Python
+        virtual void populateScriptingEnvironment(librepcb::python::ScriptingEnvironment &env);
+
 
     public slots:
         virtual bool save() noexcept;
@@ -120,7 +127,6 @@ class EditorWidgetBase : public QWidget
         virtual bool zoomOut() noexcept {return false;}
         virtual bool zoomAll() noexcept {return false;}
         virtual bool abortCommand() noexcept {return false;}
-        virtual bool runPythonScript() noexcept;
         virtual bool editGridProperties() noexcept {return false;}
 
 

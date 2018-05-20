@@ -40,6 +40,7 @@
 #include "cmp/componenteditorwidget.h"
 #include "dev/deviceeditorwidget.h"
 #include "newelementwizard/newelementwizard.h"
+#include "../python/embedding.h"
 
 /*****************************************************************************************
  *  Namespace
@@ -73,8 +74,6 @@ LibraryEditor::LibraryEditor(workspace::Workspace& ws, QSharedPointer<Library> l
             this, &LibraryEditor::removeTriggered);
     connect(mUi->actionAbortCommand, &QAction::triggered,
             this, &LibraryEditor::abortCommandTriggered);
-    connect(mUi->actionRunPythonScript, &QAction::triggered,
-            this, &LibraryEditor::runPythonScriptTriggered);
     connect(mUi->actionZoomIn, &QAction::triggered,
             this, &LibraryEditor::zoomInTriggered);
     connect(mUi->actionZoomOut, &QAction::triggered,
@@ -87,6 +86,13 @@ LibraryEditor::LibraryEditor(workspace::Workspace& ws, QSharedPointer<Library> l
             this, &LibraryEditor::currentTabChanged);
     connect(mUi->tabWidget, &QTabWidget::tabCloseRequested,
             this, &LibraryEditor::tabCloseRequested);
+
+    // add the python command line
+    mPythonCommandLine = new QLineEdit(mUi->scriptingToolbar);
+    mPythonAction = mUi->scriptingToolbar->addWidget(mPythonCommandLine);
+    mPythonAction->setVisible(true);
+    connect(mPythonCommandLine, &QLineEdit::returnPressed,
+            this, &LibraryEditor::runPythonTriggered);
 
     // lock the library directory
     mLock.tryLock(); // can throw
@@ -355,11 +361,6 @@ void LibraryEditor::abortCommandTriggered() noexcept
     if (mCurrentEditorWidget) mCurrentEditorWidget->abortCommand();
 }
 
-void LibraryEditor::runPythonScriptTriggered() noexcept
-{
-    if (mCurrentEditorWidget) mCurrentEditorWidget->runPythonScript();
-}
-
 void LibraryEditor::zoomInTriggered() noexcept
 {
     if (mCurrentEditorWidget) mCurrentEditorWidget->zoomIn();
@@ -540,6 +541,14 @@ void LibraryEditor::addLayer(const QString& name, bool forceVisible) noexcept
     mLayers.append(layer.take());
 }
 
+void LibraryEditor::runPythonTriggered() noexcept
+{
+    QString cmdline = mPythonCommandLine->text();
+    qDebug() << "run script: " << cmdline;
+    librepcb::python::ScriptingEnvironment env;
+    mCurrentEditorWidget->populateScriptingEnvironment(env);
+    env.runScript(cmdline);
+}
 /*****************************************************************************************
  *  End of File
  ****************************************************************************************/

@@ -314,13 +314,10 @@ bool PackageEditorWidget::isInterfaceBroken() const noexcept
     }
     return false;
 }
-
-bool PackageEditorWidget::runPythonScript() noexcept
+void PackageEditorWidget::populateScriptingEnvironment(librepcb::python::ScriptingEnvironment &env)
 {
-    librepcb::python::ScriptingEnvironment py(mUndoStack.data());
-    py.setPackage(mPackage.data());
-    py.runScript("embedding.py");
-    return true;
+    EditorWidgetBase::populateScriptingEnvironment(env);
+    env.setPackage(mPackage.data());
 }
 
 /*****************************************************************************************
